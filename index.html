@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portfolio - Accueil | Valentin Geslin</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: #2f3640;
+            line-height: 1.6;
+            background-color: #ffffff;
+        }
+
+        /* Navigation */
+        nav {
+            background-color: #1f3c88;
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        nav > ul > li {
+            position: relative;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            transition: background-color 0.3s;
+            border-radius: 4px;
+            display: block;
+        }
+
+        nav a:hover {
+            background-color: #16a085;
+        }
+
+        /* Dropdown menu - FIX DÉFINITIF */
+        .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+
+        .dropdown > a {
+            cursor: pointer;
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: #1f3c88;
+            min-width: 220px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            border-radius: 4px;
+            margin-top: 0.3rem;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 0.5rem 0;
+            /* Ajout d'une zone invisible pour garder le menu ouvert */
+            padding-top: 0.5rem;
+        }
+
+        /* Zone invisible au-dessus du dropdown pour éviter qu'il disparaisse */
+        .dropdown::before {
+            content: '';
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            height: 0.8rem;
+            background: transparent;
+        }
+
+        .dropdown-content a {
+            padding: 0.75rem 1.5rem;
+            white-space: nowrap;
+        }
+
+        .dropdown-content a:hover {
+            background-color: #16a085;
+        }
+
+        /* Garde le menu ouvert */
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+
+        /* Header */
+        header {
+            background: linear-gradient(135deg, #1f3c88 0%, #16a085 100%);
+            color: white;
+            text-align: center;
+            padding: 3rem 1rem;
+        }
+
+        header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        /* Container */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem 1rem;
+        }
+
+        /* Section */
+        section {
+            margin-bottom: 3rem;
+        }
+
+        section h2 {
+            color: #1f3c88;
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        /* Trait sous les titres */
+        .section-divider {
+            width: 60px;
+            height: 3px;
+            background-color: #16a085;
+            margin-bottom: 1.5rem;
+        }
+
+        /* Presentation Section */
+        .presentation {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+            background-color: #f1f2f6;
+            padding: 2rem;
+            border-radius: 8px;
+            margin-bottom: 2rem;
+        }
+
+        .presentation-text {
+            flex: 2;
+        }
+
+        .presentation-photo {
+            flex: 1;
+            text-align: center;
+        }
+
+        .presentation-photo img {
+            max-width: 200px;
+            border-radius: 50%;
+            border: 4px solid #16a085;
+        }
+
+        .info-item {
+            margin: 0.5rem 0;
+        }
+
+        .info-item strong {
+            color: #1f3c88;
+        }
+
+        /* Info Box */
+        .info-box {
+            background-color: #f1f2f6;
+            padding: 1.5rem;
+            border-radius: 8px;
+            border-left: 4px solid #16a085;
+            margin: 1.5rem 0;
+        }
+
+        /* Organisation Cards */
+        .organisation-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .but-card {
+            background-color: #f1f2f6;
+            padding: 2rem;
+            border-radius: 8px;
+            border-left: 4px solid #4a69bd;
+        }
+
+        .but-card h3 {
+            color: #1f3c88;
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+        }
+
+        /* Cartes de compétences CLIQUABLES */
+        .competence-item {
+            background-color: white;
+            padding: 1rem;
+            border-radius: 6px;
+            margin-bottom: 1rem;
+            border-left: 3px solid #4a69bd;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            color: inherit;
+            display: block;
+        }
+
+        .competence-item:hover {
+            transform: translateX(10px);
+            border-left-color: #16a085;
+            box-shadow: 0 4px 12px rgba(22, 160, 133, 0.3);
+            background-color: #e8f8f5;
+        }
+
+        .competence-item h4 {
+            color: #1f3c88;
+            margin-bottom: 0.5rem;
+            font-size: 1.1rem;
+        }
+
+        .competence-item p {
+            font-size: 0.95rem;
+            color: #555;
+        }
+
+        .sae-list {
+            margin-top: 0.5rem;
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        .sae-list strong {
+            color: #16a085;
+        }
+
+        /* Footer */
+        footer {
+            background-color: #2f3640;
+            color: white;
+            text-align: center;
+            padding: 2rem;
+            margin-top: 3rem;
+        }
+
+        footer a {
+            color: #16a085;
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 2rem;
+            }
+
+            .presentation {
+                flex-direction: column;
+            }
+
+            nav ul {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+
+            .dropdown-content {
+                position: static;
+                box-shadow: none;
+                transform: none;
+                left: auto;
+            }
+
+            .organisation-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navigation -->
+    <nav>
+        <ul>
+            <li><a href="index.html">Accueil</a></li>
+            <li class="dropdown">
+                <a>BUT1 ▼</a>
+                <div class="dropdown-content">
+                    <a href="BUT1/traiter-but1.html">Traiter</a>
+                    <a href="BUT1/analyser-but1.html">Analyser</a>
+                    <a href="BUT1/valoriser-but1.html">Valoriser</a>
+                </div>
+            </li>
+            <li class="dropdown">
+                <a>BUT2 ▼</a>
+                <div class="dropdown-content">
+                    <a href="BUT2/traiter-but2.html">Traiter</a>
+                    <a href="BUT2/analyser-but2.html">Analyser</a>
+                    <a href="BUT2/valoriser-but2.html">Valoriser</a>
+                    <a href="BUT2/modeliser-but2.html">Modéliser</a>
+                </div>
+            </li>
+            <li><a href="stage.html">Stage</a></li>
+            <li><a href="projection.html">Projection BUT3</a></li>
+        </ul>
+    </nav>
+
+    <!-- Header -->
+    <header>
+        <h1>Valentin Geslin</h1>
+        <p>Portfolio de compétences</p>
+    </header>
+
+    <!-- Main Container -->
+    <div class="container">
+
+        <!-- Section 1: Présentation personnelle -->
+        <section>
+            <h2>Présentation personnelle</h2>
+            <div class="section-divider"></div>
+            
+            <div class="presentation">
+                <div class="presentation-text">
+                    <div class="info-item">
+                        <strong>Nom / Prénom :</strong> Valentin Geslin
+                    </div>
+                    <div class="info-item">
+                        <strong>Formation :</strong> BUT Sciences des Données – 2e année
+                    </div>
+                    <div class="info-item">
+                        <strong>Parcours :</strong> Exploration et Modélisation Statistique (EMS) avec option Mathématiques
+                    </div>
+                    <div class="info-item">
+                        <strong>Établissement :</strong> IUT de Vannes – Université Bretagne Sud
+                    </div>
+                    <div class="info-item">
+                        <strong>Année universitaire :</strong> 2025-2026
+                    </div>
+                    <div class="info-item" style="margin-top: 1.5rem;">
+                        <strong>Projet professionnel :</strong>
+                        <p style="margin-top: 0.5rem;">
+                            Passionné par le monde du sport (notamment le football et les sports automobiles), mon ambition initiale est d'allier la data à cet univers pour optimiser les performances stratégiques et enrichir l'expérience des fans. Néanmoins, mon projet professionnel reste volontairement ouvert. Mon récent stage à la CCI m'a prouvé mon attrait pour le secteur de l'économie et de l'aide à la décision régionale. Je porte également un fort intérêt aux défis techniques offerts par l'Intelligence Artificielle et la cybersécurité, des domaines où l'exploitation fine et la protection de la donnée sont au cœur des enjeux professionnels.
+                        </p>
+                    </div>
+                </div>
+                <div class="presentation-photo">
+                    <img src="images/images1.jpg" alt="Photo de profil de Valentin Geslin">
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 2: Objectif du portfolio -->
+        <section>
+            <h2>Objectif de ce portfolio</h2>
+            <div class="section-divider"></div>
+            
+            <div class="info-box">
+                <p>
+                    Ce portfolio présente le développement de mes compétences acquises au cours du BUT Sciences des Données. Il s'appuie sur le Programme National et met en relation les compétences, les Apprentissages Critiques (AC) et les Situations d'Apprentissage et d'Évaluation (SAÉ) réalisées. Il inclut également mon stage et mes perspectives pour le BUT3.
+                </p>
+                <p style="margin-top: 1rem;">
+                    L'objectif est de démontrer ma progression académique et professionnelle, d'analyser mes acquis et d'identifier les axes d'amélioration pour ma troisième année. Ce portfolio témoigne de mon approche rigoureuse et structurée du traitement et de l'analyse des données.
+                </p>
+            </div>
+        </section>
+
+        <!-- Section 3: Organisation du portfolio -->
+        <section>
+            <h2>Organisation du portfolio</h2>
+            <div class="section-divider"></div>
+
+            <div class="organisation-grid">
+                <!-- Carte BUT1 -->
+                <div class="but-card">
+                    <h3>BUT 1 - Fondamentaux</h3>
+                    
+                    <a href="BUT1/traiter-but1.html" class="competence-item">
+                        <h4>Traiter des données</h4>
+                        <p>Collecte, préparation et structuration des données pour leur exploitation</p>
+                        <div class="sae-list">
+                            <strong>SAÉ :</strong> 1.01, 2.06
+                        </div>
+                    </a>
+
+                    <a href="BUT1/analyser-but1.html" class="competence-item">
+                        <h4>Analyser des données</h4>
+                        <p>Mise en œuvre de méthodes statistiques pour extraire de l'information</p>
+                        <div class="sae-list">
+                            <strong>SAÉ :</strong> 1.03, 2.02
+                        </div>
+                    </a>
+
+                    <a href="BUT1/valoriser-but1.html" class="competence-item">
+                        <h4>Valoriser des données</h4>
+                        <p>Communication et visualisation des résultats d'analyse</p>
+                        <div class="sae-list">
+                            <strong>SAÉ :</strong> 1.06, 2.05
+                        </div>
+                    </a>
+                </div>
+
+                <!-- Carte BUT2 -->
+                <div class="but-card">
+                    <h3>BUT 2 - Approfondissement</h3>
+                    
+                    <a href="BUT2/traiter-but2.html" class="competence-item">
+                        <h4>Traiter des données</h4>
+                        <p>Gestion de bases de données complexes et optimisation des traitements</p>
+                        <div class="sae-list">
+                            <strong>SAÉ :</strong> 3.02, 4.02
+                        </div>
+                    </a>
+
+                    <a href="BUT2/analyser-but2.html" class="competence-item">
+                        <h4>Analyser des données</h4>
+                        <p>Méthodes statistiques avancées et analyse exploratoire approfondie</p>
+                        <div class="sae-list">
+                            <strong>SAÉ :</strong> 3.03, 4.01
+                        </div>
+                    </a>
+
+                    <a href="BUT2/valoriser-but2.html" class="competence-item">
+                        <h4>Valoriser des données</h4>
+                        <p>Création de tableaux de bord et communication avancée des résultats</p>
+                        <div class="sae-list">
+                            <strong>SAÉ :</strong> 3.04, 4.02
+                        </div>
+                    </a>
+
+                    <a href="BUT2/modeliser-but2.html" class="competence-item">
+                        <h4>Modéliser des données</h4>
+                        <p>Construction de modèles prédictifs et apprentissage statistique</p>
+                        <div class="sae-list">
+                            <strong>SAÉ :</strong> 3.01, 4.01
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+    </div>
+
+    <footer>
+        <p>&copy; 2026 - Portfolio de Valentin Geslin - BUT Sciences des Données</p>
+        <p style="margin-top: 0.5rem; font-size: 0.9rem;">
+            Contact : <a href="mailto:valentingeslin231@gmail.com">valentingeslin231@gmail.com</a> | 
+            LinkedIn : <a href="https://www.linkedin.com/in/valentin-geslin" target="_blank">Valentin Geslin</a> | 
+            <a href="science-des-donn-es-30879.pdf" target="_blank">Programme national</a>
+        </p>
+    </footer>

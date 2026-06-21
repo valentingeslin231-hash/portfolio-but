@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stage - CCI Bretagne | Portfolio Valentin Geslin</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: #2f3640;
+            line-height: 1.6;
+            background-color: #ffffff;
+        }
+
+        /* Navigation */
+        nav {
+            background-color: #1f3c88;
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        nav > ul > li {
+            position: relative;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            transition: background-color 0.3s;
+            border-radius: 4px;
+            display: block;
+        }
+
+        nav a:hover {
+            background-color: #16a085;
+        }
+
+        .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+
+        .dropdown > a {
+            cursor: pointer;
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: #1f3c88;
+            min-width: 220px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            border-radius: 4px;
+            margin-top: 0.3rem;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 0.5rem 0;
+            padding-top: 0.5rem;
+        }
+
+        .dropdown::before {
+            content: '';
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            height: 0.8rem;
+            background: transparent;
+        }
+
+        .dropdown-content a {
+            padding: 0.75rem 1.5rem;
+            white-space: nowrap;
+        }
+
+        .dropdown-content a:hover {
+            background-color: #16a085;
+        }
+
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+
+        /* Header */
+        header {
+            background: linear-gradient(135deg, #1f3c88 0%, #16a085 100%);
+            color: white;
+            text-align: center;
+            padding: 3rem 1rem;
+        }
+
+        header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        /* Breadcrumb */
+        .breadcrumb {
+            background-color: #f1f2f6;
+            padding: 1rem;
+            text-align: center;
+            font-size: 0.95rem;
+        }
+
+        .breadcrumb a {
+            color: #16a085;
+            text-decoration: none;
+        }
+
+        .breadcrumb a:hover {
+            text-decoration: underline;
+        }
+
+        /* Container */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem 1rem;
+        }
+
+        /* Sections & Titres */
+        section {
+            margin-bottom: 3rem;
+        }
+
+        section h2 {
+            color: #1f3c88;
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        section h3 {
+            color: #1f3c88;
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            margin-top: 2rem;
+        }
+
+        .section-divider {
+            width: 60px;
+            height: 3px;
+            background-color: #16a085;
+            margin-bottom: 1.5rem;
+        }
+
+        /* Definition/Intro Box */
+        .definition-box {
+            background: linear-gradient(135deg, #1f3c88 0%, #16a085 100%);
+            color: white;
+            padding: 2rem;
+            border-radius: 8px;
+            margin: 2rem 0;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        /* Info Grid */
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+
+        .info-item {
+            background-color: #f1f2f6;
+            padding: 1rem;
+            border-radius: 6px;
+            border-left: 3px solid #16a085;
+        }
+
+        .info-item strong {
+            color: #1f3c88;
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+
+        /* Mission Section */
+        .mission-section {
+            background-color: white;
+            border: 2px solid #1f3c88;
+            border-radius: 8px;
+            padding: 2rem;
+            margin: 2rem 0;
+            position: relative;
+        }
+
+        .mission-section::before {
+            content: '';
+            position: absolute;
+            left: -6px;
+            top: 2rem;
+            width: 12px;
+            height: 12px;
+            background-color: #16a085;
+            border-radius: 50%;
+            box-shadow: 0 0 0 4px white, 0 0 0 6px #16a085;
+        }
+
+        .mission-header {
+            border-bottom: 2px solid #f1f2f6;
+            padding-bottom: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .mission-header h3 {
+            color: #1f3c88;
+            margin: 0 0 0.5rem 0;
+        }
+
+        /* AC Card */
+        .ac-card {
+            background-color: #f1f2f6;
+            padding: 1.5rem;
+            border-radius: 8px;
+            border-left: 4px solid #16a085;
+            margin: 1.5rem 0;
+        }
+
+        .ac-card h4 {
+            color: #1f3c88;
+            margin-bottom: 1rem;
+        }
+
+        .ac-card ul {
+            list-style-type: disc;
+            list-style-position: inside;
+            margin-left: 0.5rem;
+        }
+
+        .ac-card li {
+            margin: 0.5rem 0;
+            padding-left: 0.25rem;
+        }
+
+        /* Tools Badges */
+        .tools {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin: 1rem 0;
+        }
+
+        .tool-badge {
+            background-color: #1f3c88;
+            color: white;
+            padding: 0.4rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        /* Evidence Box */
+        .evidence-box {
+            background-color: #e8f8f5;
+            padding: 1.5rem;
+            border-radius: 8px;
+            border-left: 4px solid #16a085;
+            margin: 1.5rem 0;
+        }
+
+        .evidence-box h4 {
+            color: #1f3c88;
+            margin-bottom: 1rem;
+        }
+
+        .evidence-image {
+            max-width: 100%;
+            border-radius: 8px;
+            margin: 1rem 0;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            display: block;
+            border: 1px solid #ddd;
+        }
+
+        /* Impact Section */
+        .impact-section {
+            background: linear-gradient(135deg, #f1f2f6 0%, #e8f8f5 100%);
+            padding: 2rem;
+            border-radius: 8px;
+            border-left: 4px solid #16a085;
+            margin-top: 3rem;
+        }
+
+        .impact-section h2 {
+            color: #1f3c88;
+            margin-bottom: 1rem;
+        }
+
+        /* Footer */
+        footer {
+            background-color: #2f3640;
+            color: white;
+            text-align: center;
+            padding: 2rem;
+            margin-top: 3rem;
+        }
+
+        footer a {
+            color: #16a085;
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 768px) {
+            header h1 { font-size: 2rem; }
+            nav ul { flex-direction: column; gap: 0.5rem; }
+            .dropdown-content { position: static; transform: none; box-shadow: none; left: auto; }
+            .info-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <ul>
+            <li><a href="index.html">Accueil</a></li>
+            <li class="dropdown">
+                <a>BUT1 ▼</a>
+                <div class="dropdown-content">
+                    <a href="BUT1/traiter-but1.html">Traiter</a>
+                    <a href="BUT1/analyser-but1.html">Analyser</a>
+                    <a href="BUT1/valoriser-but1.html">Valoriser</a>
+                </div>
+            </li>
+            <li class="dropdown">
+                <a>BUT2 ▼</a>
+                <div class="dropdown-content">
+                    <a href="BUT2/traiter-but2.html">Traiter</a>
+                    <a href="BUT2/analyser-but2.html">Analyser</a>
+                    <a href="BUT2/valoriser-but2.html">Valoriser</a>
+                    <a href="BUT2/modeliser-but2.html">Modéliser</a>
+                </div>
+            </li>
+            <li><a href="stage.html">Stage</a></li>
+            <li><a href="projection.html">Projection BUT3</a></li>
+        </ul>
+    </nav>
+
+    <header>
+        <h1>Expérience en Stage</h1>
+        <p>Modernisation de la chaîne décisionnelle du Baromètre de Conjoncture</p>
+    </header>
+
+    <div class="breadcrumb">
+        <a href="index.html">Accueil</a> / Stage
+    </div>
+
+    <div class="container">
+
+        <section>
+            <h2>Présentation de la mission</h2>
+            <div class="section-divider"></div>
+
+            <div class="info-grid">
+                <div class="info-item">
+                    <strong>Structure d'accueil</strong>
+                    <p>Chambre de Commerce et d'Industrie (CCI) Bretagne, Service Information économique et territoires.</p>
+                </div>
+                <div class="info-item">
+                    <strong>Période</strong>
+                    <p>30 mars au 19 juin 2026 (12 semaines).</p>
+                </div>
+                <div class="info-item">
+                    <strong>Tuteurs</strong>
+                    <p>Nathalie Boursier (Cheffe de service) et Guillaume Millau (Chargé d'études économiques).</p>
+                </div>
+            </div>
+
+            <div class="definition-box">
+                <p>
+                    <strong>Le défi :</strong> Le service réalise le <em>Baromètre de conjoncture économique</em> breton. Les traitements reposaient historiquement sur le logiciel Le Sphinx, dont le plafond technique bloqué à 20 000 réponses forçait la suppression des vagues précédentes pour traiter les nouvelles données, compliquant l'analyse à long terme.
+                </p>
+                <p style="margin-top: 1rem;">
+                    <strong>Mon objectif :</strong> Concevoir et déployer une solution décisionnelle robuste sous PostgreSQL pour centraliser et historiser l'ensemble des enquêtes réalisées depuis 2019, puis développer des tableaux de bord interactifs sous Power BI pour automatiser la diffusion des indicateurs.
+                </p>
+            </div>
+        </section>
+
+        <section>
+            <h2>Déroulement du projet et Apprentissages Critiques</h2>
+            <div class="section-divider"></div>
+
+            <div class="mission-section">
+                <div class="mission-header">
+                    <h3>1. Analyse des besoins et modélisation de l'entrepôt</h3>
+                </div>
+
+                <div class="ac-card">
+                    <h4>Apprentissages Critiques mobilisés</h4>
+                    <ul>
+                        <li><strong>AC21.01 :</strong> Comprendre l’organisation des données de l’entreprise en dressant une cartographie des variables sources et cibles.</li>
+                        <li><strong>AC21.02 :</strong> Réaliser le rôle central et spécifique de l’entrepôt de données dans la chaîne décisionnelle pour garantir la pérennité du stockage indépendamment des outils de restitution.</li>
+                    </ul>
+                </div>
+
+                <p>
+                    L'analyse des fichiers historiques a révélé des variations structurelles importantes selon les années. Après arbitrage, la réflexion technique s'est orientée vers une architecture modulaire solide basée sur un modèle en étoile.
+                </p>
+
+                <div class="tools">
+                    <span class="tool-badge">PostgreSQL</span>
+                    <span class="tool-badge">Modélisation dimensionnelle</span>
+                    <span class="tool-badge">Excel (Dictionnaire)</span>
+                </div>
+
+                <div class="evidence-box">
+                    <h4>Preuve visuelle : Modélisation en étoile</h4>
+                    <p>La table de faits centrale reponse concentre les données quantitatives et se connecte directement aux tables de dimensions comme repondant, figeant les caractéristiques de l'entreprise selon une logique de photographie temporelle.</p>
+                    <img src="images/schema_modele.png" alt="Schéma de l'architecture en étoile de l'entrepôt" class="evidence-image">
+                </div>
+            </div>
+
+            <div class="mission-section">
+                <div class="mission-header">
+                    <h3>2. Pipeline d'intégration ELT et fiabilisation</h3>
+                </div>
+
+                <div class="ac-card">
+                    <h4>Apprentissages Critiques mobilisés</h4>
+                    <ul>
+                        <li><strong>AC21.03 :</strong> Identifier et résoudre les problèmes d’intégration de sources complémentaires et hétérogènes (restructuration de fichiers, correction de l'absence de pondération sur la campagne 2020 via RECHERCHEV).</li>
+                        <li><strong>AC21.05 :</strong> Apprécier l’intérêt de briques logicielles existantes et savoir les utiliser (scripts d'insertion, séquences PostgreSQL paramétrées pour la sécurité de la clé technique gid).</li>
+                    </ul>
+                </div>
+
+                <p>
+                    Pour centraliser les traitements directement dans la base de données, j'ai implémenté une architecture de type Extract, Load, Transform (ELT). Les données brutes transitent par un schéma de recette typé au format texte pour figer la donnée, puis sont nettoyées et enrichies via le référentiel d'entreprises régional.
+                </p>
+
+                <div class="tools">
+                    <span class="tool-badge">SQL (PostgreSQL)</span>
+                    <span class="tool-badge">Fonctions de fenêtrage</span>
+                    <span class="tool-badge">IA Générative</span>
+                </div>
+
+                <div class="evidence-box">
+                    <h4>Preuve visuelle : Flux d'intégration et restructuration</h4>
+                    <p>Pour adapter les fichiers horizontaux du questionnaire au modèle relationnel vertical, j'ai automatisé une opération de dépivotage (unpivot) à l'aide de l'intelligence artificielle pour générer rapidement des scripts SQL reproductibles.</p>
+                    <img src="images/schema_flux.png" alt="Schéma conceptuel du flux ELT" class="evidence-image">
+                </div>
+            </div>
+
+            <div class="mission-section">
+                <div class="mission-header">
+                    <h3>3. Restitution décisionnelle, DAX et Contrôle statistique</h3>
+                </div>
+
+                <div class="ac-card">
+                    <h4>Apprentissages Critiques mobilisés</h4>
+                    <ul>
+                        <li><strong>AC21.04 :</strong> Comprendre la nécessité de tester, corriger et documenter un programme (contrôle des pourcentages PostgreSQL par rapport aux archives Excel historiques et dictionnaire de données dynamique).</li>
+                        <li><strong>AC23.03 :</strong> Saisir la nécessité de choisir des indicateurs pertinents pour communiquer sur les résultats (calcul précis des proportions pondérées et du solde d'opinion historique).</li>
+                        <li><strong>AC23.04 :</strong> Prendre conscience de la rigueur requise dans ses productions et dans la communication à leur propos en garantissant la conformité mathématique stricte des indicateurs.</li>
+                    </ul>
+                </div>
+
+                <p>
+                    La connexion technique ODBC utilise le mode Importation afin de stocker les données directement dans la mémoire de Power BI, assurant un croisement instantané des filtres sans surcharger le serveur de production.
+                </p>
+
+                <div class="tools">
+                    <span class="tool-badge">Power BI</span>
+                    <span class="tool-badge">Langage DAX</span>
+                    <span class="tool-badge">ODBC Connection</span>
+                </div>
+
+                <div class="evidence-box">
+                    <h4>Preuve visuelle : Mesures de sécurité DAX</h4>
+                    <p>Pour lever le doute des équipes métiers, j'ai développé des formules DAX itératives combinant les fonctions d'agrégation et de relations pour appliquer le redressement statistique. Afin de préserver strictement l'anonymat des entreprises croisées (secret statistique), la formule masque dynamiquement les graphiques si l'effectif ciblé descend en deçà de 30 répondants.</p>
+                    <img src="images/dax_securite.png" alt="Code DAX pour le secret statistique" class="evidence-image" style="max-width: 80%;">
+                    
+                    <p style="margin-top: 1.5rem;">L'application finale offre une interface analytique experte hautement interactive dotée d'un volet de filtres rétractable géré via des signets.</p>
+                    <img src="images/tdb_powerbi.png" alt="Interface du tableau de bord expert sous Power BI" class="evidence-image">
+                </div>
+            </div>
+        </section>
+
+        <section class="impact-section">
+            <h2>Bilan global : Mon stage en BUT2</h2>
+            <div class="section-divider"></div>
+            
+            <div class="ac-card">
+                <h4>Ressources et relations professionnelles valorisées</h4>
+                <ul>
+                    <li><strong>AC23.01 :</strong> Saisir l’intérêt de mobiliser de manière proactive des ressources métiers en travaillant avec les responsables pour figer et standardiser la trame d'exportation à la source.</li>
+                    <li><strong>AC23.02 :</strong> Savoir défendre ses choix d’analyses, notamment la mise en œuvre d'un seuil de sécurité strict cohérent avec les pratiques de l'Insee et la priorisation du modèle en étoile sur Power BI.</li>
+                    <li><strong>AC23.05 :</strong> Comprendre les enjeux des relations en milieu professionnel adaptées à l’interlocuteur en concevant deux niveaux de rapports distincts (un rapport public simplifié pour les ressortissants et un rapport dense pour l'analyse des chargés d'études).</li>
+                </ul>
+            </div>
+
+            <h3 style="font-size: 1.2rem; margin-top: 1.5rem; color: #1f3c88;">Impact et industrialisation</h3>
+            <p>
+                La mise en production de cette architecture apporte une plus-value concrète et mesurable à la CCI Bretagne. L'entrepôt centralise désormais plus de 300 000 réponses réparties sur 14 vagues semestrielles. L'intégration d'une nouvelle campagne se condense entièrement dans un script global et automatisé : le processus complet ne prend plus qu'une quinzaine de minutes contre plusieurs heures de manipulation manuelle auparavant.
+            </p>
+
+            <h3 style="font-size: 1.2rem; margin-top: 1.5rem; color: #1f3c88;">Compétences acquises</h3>
+            <p>
+                Ce projet m'a permis d'appliquer mes connaissances théoriques sur un cas d'usage d'envergure. J'ai configuré de manière autonome un pipeline de données complet, depuis l'extraction de fichiers hétérogènes jusqu'au déploiement de visualisations dynamiques et sécurisées en ligne, partagées via un espace de travail cloud unique.
+            </p>
+        </section>
+
+    </div>
+
+    <footer>
+        <p>&copy; 2026 - Portfolio de Valentin Geslin - BUT Sciences des Données</p>
+        <p style="margin-top: 0.5rem; font-size: 0.9rem;">
+            Contact : <a href="mailto:valentingeslin231@gmail.com">valentingeslin231@gmail.com</a> | 
+            LinkedIn : <a href="https://www.linkedin.com/in/valentin-geslin" target="_blank">Valentin Geslin</a> | 
+            <a href="science-des-donn-es-30879.pdf" target="_blank">Programme national</a>
+        </p>
+    </footer>
+
+</body>
+</html>
