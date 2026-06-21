@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analyser des données - BUT2 | Portfolio Valentin Geslin</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: #2f3640;
+            line-height: 1.6;
+            background-color: #ffffff;
+        }
+
+        /* Navigation */
+        nav {
+            background-color: #1f3c88;
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        nav > ul > li {
+            position: relative;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            transition: background-color 0.3s;
+            border-radius: 4px;
+            display: block;
+        }
+
+        nav a:hover {
+            background-color: #16a085;
+        }
+
+        /* Dropdown menu */
+        .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+
+        .dropdown > a {
+            cursor: pointer;
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: #1f3c88;
+            min-width: 220px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            border-radius: 4px;
+            margin-top: 0.3rem;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 0.5rem 0;
+        }
+
+        .dropdown::before {
+            content: '';
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            height: 0.8rem;
+            background: transparent;
+        }
+
+        .dropdown-content a {
+            padding: 0.75rem 1.5rem;
+            white-space: nowrap;
+        }
+
+        .dropdown-content a:hover {
+            background-color: #16a085;
+        }
+
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+
+        /* Header */
+        header {
+            background: linear-gradient(135deg, #1f3c88 0%, #16a085 100%);
+            color: white;
+            text-align: center;
+            padding: 3rem 1rem;
+        }
+
+        header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        /* Breadcrumb */
+        .breadcrumb {
+            background-color: #f1f2f6;
+            padding: 1rem;
+            text-align: center;
+            font-size: 0.95rem;
+        }
+
+        .breadcrumb a {
+            color: #16a085;
+            text-decoration: none;
+        }
+
+        .breadcrumb a:hover {
+            text-decoration: underline;
+        }
+
+        /* Container */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem 1rem;
+        }
+
+        /* Section */
+        section {
+            margin-bottom: 3rem;
+        }
+
+        section h2 {
+            color: #1f3c88;
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        section h3 {
+            color: #1f3c88;
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            margin-top: 2rem;
+        }
+
+        .section-divider {
+            width: 60px;
+            height: 3px;
+            background-color: #16a085;
+            margin-bottom: 1.5rem;
+        }
+
+        /* Definition Box */
+        .definition-box {
+            background: linear-gradient(135deg, #1f3c88 0%, #16a085 100%);
+            color: white;
+            padding: 2rem;
+            border-radius: 8px;
+            margin: 2rem 0;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        /* Info note */
+        .info-note {
+            background-color: #e8f8f5;
+            padding: 1rem;
+            border-radius: 8px;
+            border-left: 4px solid #16a085;
+            margin: 1.5rem 0;
+            font-size: 0.95rem;
+        }
+
+        /* AC Card */
+        .ac-card {
+            background-color: #f1f2f6;
+            padding: 1.5rem;
+            border-radius: 8px;
+            border-left: 4px solid #16a085;
+            margin: 1.5rem 0;
+        }
+
+        .ac-card h4 {
+            color: #1f3c88;
+            margin-bottom: 1rem;
+        }
+
+        .ac-card ul {
+            list-style-type: disc;
+            list-style-position: inside;
+            margin-left: 0.5rem;
+        }
+
+        .ac-card li {
+            margin: 0.5rem 0;
+            padding-left: 0.25rem;
+        }
+
+        /* SAE Section */
+        .sae-section {
+            background-color: white;
+            border: 2px solid #4a69bd;
+            border-radius: 8px;
+            padding: 2rem;
+            margin: 2rem 0;
+            position: relative;
+        }
+
+        .sae-section::before {
+            content: '';
+            position: absolute;
+            left: -6px;
+            top: 2rem;
+            width: 12px;
+            height: 12px;
+            background-color: #16a085;
+            border-radius: 50%;
+            box-shadow: 0 0 0 4px white, 0 0 0 6px #16a085;
+        }
+
+        .sae-header {
+            border-bottom: 2px solid #f1f2f6;
+            padding-bottom: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .sae-header h3 {
+            color: #1f3c88;
+            margin: 0 0 0.5rem 0;
+        }
+
+        .sae-tag {
+            display: inline-block;
+            background-color: #e8f8f5;
+            color: #16a085;
+            padding: 0.25rem 0.75rem;
+            border-radius: 4px;
+            font-size: 0.85rem;
+            font-weight: bold;
+            margin-right: 0.5rem;
+        }
+
+        /* Info Grid */
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+
+        .info-item {
+            background-color: #f1f2f6;
+            padding: 1rem;
+            border-radius: 6px;
+            border-left: 3px solid #16a085;
+        }
+
+        .info-item strong {
+            color: #1f3c88;
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+
+        /* Tools Badges */
+        .tools {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin: 1rem 0;
+        }
+
+        .tool-badge {
+            background-color: #1f3c88;
+            color: white;
+            padding: 0.4rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        /* Evidence Box */
+        .evidence-box {
+            background-color: #e8f8f5;
+            padding: 1.5rem;
+            border-radius: 8px;
+            border-left: 4px solid #16a085;
+            margin: 1.5rem 0;
+        }
+
+        .evidence-box h4 {
+            color: #1f3c88;
+            margin-bottom: 1rem;
+        }
+
+        .evidence-image {
+            max-width: 100%;
+            border-radius: 8px;
+            margin: 1rem 0;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            display: block;
+        }
+
+        /* Learning Box */
+        .learning-box {
+            background-color: #fef9f5;
+            padding: 1.5rem;
+            border-radius: 8px;
+            border-left: 4px solid #16a085;
+            margin: 1.5rem 0;
+        }
+
+        .learning-box h4 {
+            color: #1f3c88;
+            margin-bottom: 1rem;
+        }
+
+        /* Global Impact */
+        .impact-section {
+            background: linear-gradient(135deg, #f1f2f6 0%, #e8f8f5 100%);
+            padding: 2rem;
+            border-radius: 8px;
+            border-left: 4px solid #16a085;
+            margin-top: 3rem;
+        }
+
+        .impact-section h2 {
+            color: #1f3c88;
+            margin-bottom: 1rem;
+        }
+
+        /* Footer */
+        footer {
+            background-color: #2f3640;
+            color: white;
+            text-align: center;
+            padding: 2rem;
+            margin-top: 3rem;
+        }
+
+        footer a {
+            color: #16a085;
+            text-decoration: none;
+        }
+
+        @media (max-width: 768px) {
+            header h1 { font-size: 2rem; }
+            nav ul { flex-direction: column; gap: 0.5rem; }
+            .dropdown-content { position: static; transform: none; box-shadow: none; }
+            .info-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <ul>
+            <li><a href="../index.html">Accueil</a></li>
+            <li class="dropdown">
+                <a>BUT1 ▼</a>
+                <div class="dropdown-content">
+                    <a href="../BUT1/traiter-but1.html">Traiter</a>
+                    <a href="../BUT1/analyser-but1.html">Analyser</a>
+                    <a href="../BUT1/valoriser-but1.html">Valoriser</a>
+                </div>
+            </li>
+            <li class="dropdown">
+                <a>BUT2 ▼</a>
+                <div class="dropdown-content">
+                    <a href="traiter-but2.html">Traiter</a>
+                    <a href="analyser-but2.html">Analyser</a>
+                    <a href="valoriser-but2.html">Valoriser</a>
+                    <a href="modeliser-but2.html">Modéliser</a>
+                </div>
+            </li>
+            <li><a href="../stage.html">Stage</a></li>
+            <li><a href="../projection.html">Projection BUT3</a></li>
+        </ul>
+    </nav>
+
+    <header>
+        <h1>Analyser statistiquement les données</h1>
+        <p>BUT 2</p>
+    </header>
+
+    <div class="breadcrumb">
+        <a href="../index.html">Accueil</a> / <a href="../index.html#organisation">BUT2</a> / Analyser les données
+    </div>
+
+    <div class="container">
+
+        <section>
+            <h2>Définition de la compétence</h2>
+            <div class="section-divider"></div>
+
+            <div class="definition-box">
+                <p>
+                    <strong>Analyser statistiquement les données</strong> consiste à faire parler les chiffres pour comprendre le passé et anticiper l'avenir. C'est l'art d'utiliser des algorithmes rigoureux pour extraire des tendances cachées et tester des hypothèses métiers concrètes.
+                </p>
+                <p style="margin-top: 1rem;">
+                    <strong>En BUT2,</strong> j'ai franchi un véritable cap : je suis passé de la simple observation à l'anticipation. L'accent est mis sur l'analyse avancée : dompter des séries temporelles, appliquer des algorithmes de Machine Learning, évaluer la fiabilité des modèles et livrer des rapports reproductibles à forte valeur ajoutée.
+                </p>
+            </div>
+        </section>
+
+        <section>
+            <h2>Situations d'Apprentissage et d'Évaluation</h2>
+            <div class="section-divider"></div>
+
+            <div class="info-note">
+                <p>
+                    Pour illustrer ma montée en compétences, j'ai sélectionné deux SAÉ majeures de ma deuxième année. Elles démontrent ma capacité à modéliser des phénomènes complexes (le temps et la finance) de bout en bout. 
+                </p>
+            </div>
+
+            <div class="sae-section">
+                <div class="sae-header">
+                    <h3>SAÉ 3.03 : Prédire l'avenir grâce aux séries temporelles</h3>
+                    <div>
+                        <span class="sae-tag">Semestre 3</span>
+                        <span class="sae-tag">Binôme</span>
+                    </div>
+                </div>
+
+                <div class="ac-card">
+                    <h4>Apprentissages Critiques mobilisés</h4>
+                    <ul>
+                        <li><strong>AC22.01 :</strong> Prendre conscience de la différence entre modélisation statistique et analyse exploratoire</li>
+                        <li><strong>AC22.02 :</strong> Saisir la spécificité de l’analyse des données temporelles</li>
+                        <li><strong>AC22.05 :</strong> Apprécier les limites de validité et les conditions d’application d’une analyse</li>
+                    </ul>
+                </div>
+
+                <h4 style="color: #1f3c88; margin-bottom: 1rem;">Le défi du projet</h4>
+                <p>
+                    Comment prédire l'imprévisible ? Ce projet en binôme nous a confrontés à un jeu de données réel : près de 30 ans d'historique (1990-2018) des immatriculations automobiles. Notre mission était de décrypter les cycles de ce marché complexe et de construire des algorithmes capables de prédire précisément les ventes pour l'année 2019.
+                </p>
+
+                <div class="info-grid">
+                    <div class="info-item">
+                        <strong>Objectif métier</strong>
+                        <p>Comparer des modèles mathématiques prédictifs pour anticiper les valeurs futures.</p>
+                    </div>
+                    <div class="info-item">
+                        <strong>Livrables</strong>
+                        <p>Rapport d'analyse dynamique et totalement reproductible (R Markdown).</p>
+                    </div>
+                    <div class="info-item">
+                        <strong>Durée</strong>
+                        <p>1 mois</p>
+                    </div>
+                </div>
+
+                <div class="tools">
+                    <span class="tool-badge">R (Rstudio)</span>
+                </div>
+
+                <div class="evidence-box">
+                    <h4>Preuves et Démarche d'analyse</h4>
+                    <p style="margin-bottom: 1rem;">
+                        <strong>1. Nettoyer et isoler les tendances</strong><br>
+                        Avant de prédire, il faut comprendre le passé. Nous avons "décomposé" mathématiquement la série brute à l'aide de moyennes mobiles pour séparer la tendance de fond et l'effet des saisons sur les ventes.
+                    </p>
+                    <img src="../images/sae3.03-ms.png" alt="Graphique de décomposition de la série" class="evidence-image">
+                    
+                    <p style="margin-top: 1.5rem; margin-bottom: 1rem;">
+                        <strong>2. Modéliser et anticiper (Le choc des algorithmes)</strong><br>
+                        L'enjeu n'était pas de choisir un modèle au hasard, mais de prouver son efficacité. Nous avons testé le lissage exponentiel de Holt-Winters et l'avons confronté à un modèle paramétrique. La décision finale s'est faite sur la base d'un critère strict : la minimisation de l'Erreur Quadratique Moyenne (EQM).
+                    </p>
+                    <img src="../images/sae3.03-hw.png" alt="Prévision Holt-Winters" class="evidence-image">
+                    
+                    <p style="margin-top: 1.5rem; margin-bottom: 1rem;">
+                        Voici les prévisions générées par notre <strong>modèle paramétrique gagnant</strong>. Il s'ajuste parfaitement aux variations réelles des ventes et présente une erreur nettement inférieure :
+                    </p>
+                    <img src="../images/sae3.03-par.png" alt="Modèle paramétrique" class="evidence-image">
+                </div>
+
+                <div class="learning-box">
+                    <h4>Ce que j'en retiens techniquement</h4>
+                    <ul style="margin-left: 2rem;">
+                        <li><strong>Maîtrise du temps :</strong> J'ai appris à traiter la complexité des données temporelles (saisonnalité, tendances, bruits résiduels).</li>
+                        <li><strong>La culture de l'erreur :</strong> Je sais désormais qu'un modèle ne vaut rien si l'on ne mesure pas rigoureusement son risque d'erreur (EQM) avant de le déployer.</li>
+                        <li><strong>Industrialisation du rapport :</strong> L'utilisation de R Markdown m'a prouvé la puissance d'un code propre qui génère automatiquement son analyse écrite.</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="sae-section">
+                <div class="sae-header">
+                    <h3>SAÉ 4.01 : Modéliser la valeur financière d'un joueur de football</h3>
+                    <div>
+                        <span class="sae-tag">Semestre 4</span>
+                        <span class="sae-tag">Groupe de 4</span>
+                    </div>
+                </div>
+
+                <div class="ac-card">
+                    <h4>Apprentissages Critiques mobilisés</h4>
+                    <ul>
+                        <li><strong>AC22.01 :</strong> Prendre conscience de la différence entre modélisation statistique et analyse exploratoire</li>
+                        <li><strong>AC22.04 :</strong> Appréhender l’idée de confronter une hypothèse avec la réalité pour prendre une décision</li>
+                        <li><strong>AC22.05 :</strong> Apprécier les limites de validité et les conditions d’application d’une analyse</li>
+                    </ul>
+                </div>
+
+                <h4 style="color: #1f3c88; margin-bottom: 1rem;">Le défi du projet</h4>
+                <p>
+                    Dans un marché des transferts hyper-spéculatif, comment fixer objectivement le prix d'un athlète ? L'objectif de ce projet mené sur les 5 grands championnats européens était d'utiliser la donnée pure (Expected Goals, pourcentages de tacles) pour modéliser la vraie valeur marchande d'un joueur. Il s'agissait de remplacer les impressions subjectives par une approche d'actif financier.
+                </p>
+
+                <div class="info-grid">
+                    <div class="info-item">
+                        <strong>Objectif métier</strong>
+                        <p>Déployer une stratégie experte de sélection de variables pour créer le modèle statistique le plus performant.</p>
+                    </div>
+                    <div class="info-item">
+                        <strong>Livrables</strong>
+                        <p>Notebook R, Rapport final et Soutenance orale avec support professionnel.</p>
+                    </div>
+                    <div class="info-item">
+                        <strong>Durée</strong>
+                        <p>2 mois</p>
+                    </div>
+                </div>
+
+                <div class="tools">
+                    <span class="tool-badge">R (Notebook)</span>
+                    <span class="tool-badge">PowerPoint</span>
+                </div>
+
+                <div class="evidence-box">
+                    <h4>Preuves et Démarche d'analyse</h4>
+                    <p style="margin-bottom: 1rem;">
+                        <strong>1. Décortiquer la donnée (Analyse Exploratoire)</strong><br>
+                        Avant de modéliser, il faut explorer. Grâce à notre Notebook R, nous avons nettoyé et analysé des dizaines de variables physiques, financières et de performances en match pour comprendre leur distribution.
+                    </p>
+                    <img src="../images/sae4.01-cha.png" alt="Extrait de l'analyse exploratoire sous R" class="evidence-image" style="max-width: 60%; margin: 1rem auto;">
+                    
+                    <p style="margin-top: 1.5rem; margin-bottom: 1rem;">
+                        <strong>2. Éviter le piège du surapprentissage</strong><br>
+                        Le cœur de notre expertise a été la sélection des variables. Nous avons comparé plusieurs modèles en justifiant mathématiquement chaque variable conservée ou rejetée. Enfin, nous avons dû confronter nos résultats à la réalité du terrain, puis vulgariser notre démarche complexe lors d'une soutenance devant un jury.
+                    </p>
+                    <img src="../images/sae4.01-presentation.png" alt="Extrait du diaporama autoportant" class="evidence-image">
+                </div>
+
+                <div class="learning-box">
+                    <h4>Ce que j'en retiens techniquement</h4>
+                    <ul style="margin-left: 2rem;">
+                        <li><strong>Intelligence de la donnée :</strong> J'ai appris l'art délicat de sélectionner les bonnes variables pour un modèle, afin de le rendre performant sans le saturer inutilement.</li>
+                        <li><strong>Esprit critique absolu :</strong> J'ai réalisé l'importance d'identifier les limites de ses propres données et de savoir les défendre face à un jury.</li>
+                        <li><strong>Communication Data :</strong> Traduire des concepts statistiques complexes (Notebook R) en une histoire compréhensible et visuelle (PowerPoint) est une compétence indispensable.</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section class="impact-section">
+            <h2>Mon Bilan : Un esprit d'analyste affirmé</h2>
+            <div class="section-divider"></div>
+            
+            <h3 style="font-size: 1.2rem; margin-top: 1rem;">L'évolution en BUT2</h3>
+            <p>
+                Ces deux projets marquent un véritable point de bascule. Je ne me contente plus de faire des graphiques sur des données passées ; je sais désormais concevoir des modèles mathématiques robustes pour anticiper des phénomènes réels (marché automobile, valorisation d'athlètes).
+            </p>
+
+            <h3 style="font-size: 1.2rem; margin-top: 1.5rem;">Une méthode de travail éprouvée</h3>
+            <p>
+                J'ai ancré une véritable démarche scientifique : nettoyer avec rigueur, explorer avec curiosité, modéliser avec prudence, et surtout, toujours tester la validité de mes résultats face à la réalité. Surtout, j'ai compris que la meilleure modélisation mathématique du monde n'a d'impact que si elle est reproductible techniquement et limpide à présenter.
+            </p>
+        </section>
+
+    </div>
+
+    <footer>
+        <p>&copy; 2026 - Portfolio de Valentin Geslin - BUT Sciences des Données</p>
+        <p style="margin-top: 0.5rem; font-size: 0.9rem;">
+            Contact : <a href="mailto:valentingeslin231@gmail.com">valentingeslin231@gmail.com</a> | 
+            LinkedIn : <a href="https://www.linkedin.com/in/valentin-geslin" target="_blank">Valentin Geslin</a> | 
+            <a href="../science-des-donn-es-30879.pdf" target="_blank">Programme national</a>
+        </p>
+    </footer>
+
+</body>
+</html>

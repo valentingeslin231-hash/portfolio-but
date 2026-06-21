@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Valoriser des résultats - BUT2 | Portfolio Valentin Geslin</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: #2f3640;
+            line-height: 1.6;
+            background-color: #ffffff;
+        }
+
+        /* Navigation */
+        nav {
+            background-color: #1f3c88;
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        nav > ul > li {
+            position: relative;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            transition: background-color 0.3s;
+            border-radius: 4px;
+            display: block;
+        }
+
+        nav a:hover {
+            background-color: #16a085;
+        }
+
+        /* Dropdown menu */
+        .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+
+        .dropdown > a {
+            cursor: pointer;
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: #1f3c88;
+            min-width: 220px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            border-radius: 4px;
+            margin-top: 0.3rem;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 0.5rem 0;
+        }
+
+        .dropdown::before {
+            content: '';
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            height: 0.8rem;
+            background: transparent;
+        }
+
+        .dropdown-content a {
+            padding: 0.75rem 1.5rem;
+            white-space: nowrap;
+        }
+
+        .dropdown-content a:hover {
+            background-color: #16a085;
+        }
+
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+
+        /* Header */
+        header {
+            background: linear-gradient(135deg, #1f3c88 0%, #16a085 100%);
+            color: white;
+            text-align: center;
+            padding: 3rem 1rem;
+        }
+
+        header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        /* Breadcrumb */
+        .breadcrumb {
+            background-color: #f1f2f6;
+            padding: 1rem;
+            text-align: center;
+            font-size: 0.95rem;
+        }
+
+        .breadcrumb a {
+            color: #16a085;
+            text-decoration: none;
+        }
+
+        .breadcrumb a:hover {
+            text-decoration: underline;
+        }
+
+        /* Container */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem 1rem;
+        }
+
+        /* Section */
+        section {
+            margin-bottom: 3rem;
+        }
+
+        section h2 {
+            color: #1f3c88;
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        section h3 {
+            color: #1f3c88;
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            margin-top: 2rem;
+        }
+
+        .section-divider {
+            width: 60px;
+            height: 3px;
+            background-color: #16a085;
+            margin-bottom: 1.5rem;
+        }
+
+        /* Definition Box */
+        .definition-box {
+            background: linear-gradient(135deg, #1f3c88 0%, #16a085 100%);
+            color: white;
+            padding: 2rem;
+            border-radius: 8px;
+            margin: 2rem 0;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        /* Info note */
+        .info-note {
+            background-color: #e8f8f5;
+            padding: 1rem;
+            border-radius: 8px;
+            border-left: 4px solid #16a085;
+            margin: 1.5rem 0;
+            font-size: 0.95rem;
+        }
+
+        /* AC Card */
+        .ac-card {
+            background-color: #f1f2f6;
+            padding: 1.5rem;
+            border-radius: 8px;
+            border-left: 4px solid #16a085;
+            margin: 1.5rem 0;
+        }
+
+        .ac-card h4 {
+            color: #1f3c88;
+            margin-bottom: 1rem;
+        }
+
+        .ac-card ul {
+            list-style-type: disc;
+            list-style-position: inside;
+            margin-left: 0.5rem;
+        }
+
+        .ac-card li {
+            margin: 0.5rem 0;
+            padding-left: 0.25rem;
+        }
+
+        /* SAE Section */
+        .sae-section {
+            background-color: white;
+            border: 2px solid #4a69bd;
+            border-radius: 8px;
+            padding: 2rem;
+            margin: 2rem 0;
+            position: relative;
+        }
+
+        .sae-section::before {
+            content: '';
+            position: absolute;
+            left: -6px;
+            top: 2rem;
+            width: 12px;
+            height: 12px;
+            background-color: #16a085;
+            border-radius: 50%;
+            box-shadow: 0 0 0 4px white, 0 0 0 6px #16a085;
+        }
+
+        .sae-header {
+            border-bottom: 2px solid #f1f2f6;
+            padding-bottom: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .sae-header h3 {
+            color: #1f3c88;
+            margin: 0 0 0.5rem 0;
+        }
+
+        .sae-tag {
+            display: inline-block;
+            background-color: #e8f8f5;
+            color: #16a085;
+            padding: 0.25rem 0.75rem;
+            border-radius: 4px;
+            font-size: 0.85rem;
+            font-weight: bold;
+            margin-right: 0.5rem;
+        }
+
+        /* Info Grid */
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+
+        .info-item {
+            background-color: #f1f2f6;
+            padding: 1rem;
+            border-radius: 6px;
+            border-left: 3px solid #16a085;
+        }
+
+        .info-item strong {
+            color: #1f3c88;
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+
+        /* Tools Badges */
+        .tools {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin: 1rem 0;
+        }
+
+        .tool-badge {
+            background-color: #1f3c88;
+            color: white;
+            padding: 0.4rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        /* Evidence Box */
+        .evidence-box {
+            background-color: #e8f8f5;
+            padding: 1.5rem;
+            border-radius: 8px;
+            border-left: 4px solid #16a085;
+            margin: 1.5rem 0;
+        }
+
+        .evidence-box h4 {
+            color: #1f3c88;
+            margin-bottom: 1rem;
+        }
+
+        .evidence-image {
+            max-width: 100%;
+            border-radius: 8px;
+            margin: 1rem 0;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            display: block;
+        }
+
+        /* Learning Box */
+        .learning-box {
+            background-color: #fef9f5;
+            padding: 1.5rem;
+            border-radius: 8px;
+            border-left: 4px solid #16a085;
+            margin: 1.5rem 0;
+        }
+
+        .learning-box h4 {
+            color: #1f3c88;
+            margin-bottom: 1rem;
+        }
+
+        /* Global Impact */
+        .impact-section {
+            background: linear-gradient(135deg, #f1f2f6 0%, #e8f8f5 100%);
+            padding: 2rem;
+            border-radius: 8px;
+            border-left: 4px solid #16a085;
+            margin-top: 3rem;
+        }
+
+        .impact-section h2 {
+            color: #1f3c88;
+            margin-bottom: 1rem;
+        }
+
+        /* Footer */
+        footer {
+            background-color: #2f3640;
+            color: white;
+            text-align: center;
+            padding: 2rem;
+            margin-top: 3rem;
+        }
+
+        footer a {
+            color: #16a085;
+            text-decoration: none;
+        }
+
+        @media (max-width: 768px) {
+            header h1 { font-size: 2rem; }
+            nav ul { flex-direction: column; gap: 0.5rem; }
+            .dropdown-content { position: static; transform: none; box-shadow: none; }
+            .info-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <ul>
+            <li><a href="../index.html">Accueil</a></li>
+            <li class="dropdown">
+                <a>BUT1 ▼</a>
+                <div class="dropdown-content">
+                    <a href="../BUT1/traiter-but1.html">Traiter</a>
+                    <a href="../BUT1/analyser-but1.html">Analyser</a>
+                    <a href="../BUT1/valoriser-but1.html">Valoriser</a>
+                </div>
+            </li>
+            <li class="dropdown">
+                <a>BUT2 ▼</a>
+                <div class="dropdown-content">
+                    <a href="traiter-but2.html">Traiter</a>
+                    <a href="analyser-but2.html">Analyser</a>
+                    <a href="valoriser-but2.html">Valoriser</a>
+                    <a href="modeliser-but2.html">Modéliser</a>
+                </div>
+            </li>
+            <li><a href="../stage.html">Stage</a></li>
+            <li><a href="../projection.html">Projection BUT3</a></li>
+        </ul>
+    </nav>
+
+    <header>
+        <h1>Valoriser des résultats</h1>
+        <p>BUT 2</p>
+    </header>
+
+    <div class="breadcrumb">
+        <a href="../index.html">Accueil</a> / <a href="../index.html#organisation">BUT2</a> / Valoriser des résultats
+    </div>
+
+    <div class="container">
+
+        <section>
+            <h2>Définition de la compétence</h2>
+            <div class="section-divider"></div>
+
+            <div class="definition-box">
+                <p>
+                    <strong>Valoriser des résultats</strong> consiste à rendre compréhensible une production ou un résultat, même lorsqu’il est technique ou complexe. Elle implique d’adapter son langage et ses supports au public visé, de structurer un message clair, et de mettre en valeur l’information essentielle pour faciliter la prise de décision.
+                </p>
+                <p style="margin-top: 1rem;">
+                    <strong>En BUT2</strong>, l'accent est mis sur la restitution professionnelle : vulgarisation de sujets transverses (comme le droit des données), création de tableaux de bord interactifs dynamiques, choix d'indicateurs pertinents (KPIs) et soutenance orale rigoureuse devant un jury.
+                </p>
+            </div>
+        </section>
+
+        <section>
+            <h2>Situations d'Apprentissage et d'Évaluation</h2>
+            <div class="section-divider"></div>
+
+            <div class="info-note">
+                <p>
+                    Pour illustrer cette compétence, je présente ici deux SAÉ représentatives de mon parcours en BUT2. J'ai également travaillé cette compétence dans les SAÉ 3.03 et 4.01, qui ont contribué à développer ma maîtrise du traitement de données. 
+                </p>
+            </div>
+
+            <div class="sae-section">
+                <div class="sae-header">
+                    <h3>SAÉ 3.04 : Présentation d'enjeux juridiques liés aux données (Droit à l'oubli)</h3>
+                    <div>
+                        <span class="sae-tag">Semestre 3</span>
+                        <span class="sae-tag">Binôme</span>
+                    </div>
+                </div>
+
+                <div class="ac-card">
+                    <h4>Apprentissages Critiques mobilisés</h4>
+                    <ul>
+                        <li><strong>AC23.01 :</strong> Saisir l’intérêt de mobiliser de manière proactive des ressources métiers liées à l’environnement (y compris économique, juridique, international...)</li>
+                        <li><strong>AC23.02 :</strong> Savoir défendre ses choix d’analyses</li>
+                        <li><strong>AC23.04 :</strong> Prendre conscience de la rigueur requise dans ses productions et dans la communication à leur propos</li>
+                        <li><strong>AC23.05 :</strong> Comprendre les enjeux des relations en milieu professionnel adaptées à l’interlocuteur et à sa culture</li>
+                    </ul>
+                </div>
+
+                <h4 style="color: #1f3c88; margin-bottom: 1rem;">Description du projet</h4>
+                <p>
+                    Réalisé en binôme sur une période de 2 semaines, ce projet consistait à vulgariser un sujet complexe de droit du numérique : <strong>le Droit à l'Oubli</strong>. L'objectif de valorisation était double : structurer une pensée claire sur un sujet réglementaire (RGPD, CNIL, jurisprudence) et produire un support visuel (PowerPoint) accompagnant une présentation orale fluide et professionnelle.
+                </p>
+
+                <div class="info-grid">
+                    <div class="info-item">
+                        <strong>Objectif</strong>
+                        <p>Informer et alerter sur les cadres légaux entourant la gestion des données.</p>
+                    </div>
+                    <div class="info-item">
+                        <strong>Livrables</strong>
+                        <p>Support PowerPoint autoportant et présentation orale argumentée.</p>
+                    </div>
+                    <div class="info-item">
+                        <strong>Durée</strong>
+                        <p>2 semaines</p>
+                    </div>
+                </div>
+
+                <div class="tools">
+                    <span class="tool-badge">PowerPoint</span>
+                </div>
+
+                <div class="evidence-box">
+                    <h4>Preuves de valorisation visuelle</h4>
+                    <p style="margin-bottom: 1rem;">
+                        <strong>Structuration du message :</strong> L'enjeu était de faire comprendre des concepts juridiques subtils sans perdre l'auditoire. L'image ci-dessous illustre comment nous avons vulgarisé la différence entre le déréférencement (masquer l'information) et l'effacement (supprimer la donnée). Au lieu de citer de longs textes de loi, nous avons opté pour un design épuré, permettant au public de saisir instantanément cette nuance technique.
+                    </p>
+                    
+                    <img src="../images/sae3.04-comp.png" alt="Extrait du diaporama sur les sanctions RGPD" class="evidence-image" style="max-width: 60%; margin: 1rem auto;">
+                    
+                    <p style="margin-top: 1.5rem; margin-bottom: 1rem;">
+                        <strong>Adaptation à l'auditoire :</strong> Pour nous assurer que le public retienne l'essentiel, nous avons conçu une diapositive de fin très visuelle. Cette conclusion dresse un bilan facile à comprendre sur le délicat équilibre entre vie privée et liberté d'information, répondant ainsi directement aux interrogations des professionnels sur les risques numériques.                    </p>
+                    
+                    <img src="../images/sae3.04-con.png" alt="Extrait de la conclusion du diaporama" class="evidence-image" style="max-width: 60%; margin: 1rem auto;">
+                </div>
+
+                <div class="learning-box">
+                    <h4>Ce que j'ai appris</h4>
+                    <ul style="margin-left: 2rem;">
+                        <li><strong>Art de la synthèse :</strong> Extraire l'essence d'articles de loi complexes (Article 17 du RGPD) pour les rendre intelligibles en quelques points clés.</li>
+                        <li><strong>Design de présentation :</strong> Utiliser l'espace, la hiérarchie visuelle et les mots-clés sur PowerPoint pour soutenir le discours oral, sans que la diapositive ne devienne un prompteur.</li>
+                        <li><strong>Culture métier :</strong> Comprendre que valoriser la donnée, c'est aussi maîtriser les contraintes juridiques et éthiques qui l'entourent.</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="sae-section">
+                <div class="sae-header">
+                    <h3>SAÉ 4.02 : Création d'un tableau de bord interactif (R-Shiny)</h3>
+                    <div>
+                        <span class="sae-tag">Semestre 4</span>
+                        <span class="sae-tag">Binôme</span>
+                    </div>
+                </div>
+
+                <div class="ac-card">
+                    <h4>Apprentissages Critiques mobilisés</h4>
+                    <ul>
+                        <li><strong>AC23.01 :</strong> Saisir l’intérêt de mobiliser de manière proactive des ressources métiers...</li>
+                        <li><strong>AC23.02 :</strong> Savoir défendre ses choix d’analyses</li>
+                        <li><strong>AC23.03 :</strong> Saisir la nécessité de choisir des indicateurs pertinents pour communiquer sur les résultats</li>
+                        <li><strong>AC23.04 :</strong> Prendre conscience de la rigueur requise dans ses productions et dans la communication à leur propos</li>
+                    </ul>
+                </div>
+
+                <h4 style="color: #1f3c88; margin-bottom: 1rem;">Description du projet</h4>
+                <p>
+                    Si l'analyse statistique est cruciale, sa restitution l'est tout autant. Dans ce projet basé sur la criminalité aux États-Unis, le véritable défi de valorisation a été de concevoir une application web (R-Shiny) permettant à un utilisateur non-expert d'explorer les données de manière autonome et intuitive.
+                </p>
+                <p style="margin-top: 1rem;">
+                    Nous avons dû réfléchir à l'expérience utilisateur (UI/UX), choisir les graphiques les plus lisibles (cartes interactives, matrices), et intégrer des résultats statistiques complexes (comme une ACP) dans une interface épurée facilitant la prise de décision.
+                </p>
+
+                <div class="info-grid">
+                    <div class="info-item">
+                        <strong>Objectif</strong>
+                        <p>Transformer une base de données brute en un outil d'aide à la décision visuel et interactif.</p>
+                    </div>
+                    <div class="info-item">
+                        <strong>Livrables</strong>
+                        <p>Application Web R-Shiny déployée en ligne.</p>
+                    </div>
+                    <div class="info-item">
+                        <strong>Durée</strong>
+                        <p>2 mois</p>
+                    </div>
+                </div>
+
+                <div class="tools">
+                    <span class="tool-badge">R (R-Shiny)</span>
+                    <span class="tool-badge">Data-Visualisation</span>
+                    <span class="tool-badge">UI/UX Design</span>
+                </div>
+
+                <div class="evidence-box">
+                    <h4>Preuves de valorisation technique</h4>
+                    <p style="margin-bottom: 1rem;">
+                        <strong>Choix d'indicateurs et ergonomie :</strong> L'interface a été pensée avec des filtres dynamiques (menus déroulants) permettant à l'utilisateur de sélectionner lui-même les variables à observer. La carte choroplèthe offre une lecture géographique instantanée des zones à risques.
+                    </p>
+                    <img src="../images/sae4.02corr.png" alt="Interface interactive du Dashboard Shiny" class="evidence-image" style="max-width: 60%; margin: 1rem auto;">
+                    
+                    <p style="margin-top: 1.5rem; margin-bottom: 1rem;">
+                        <strong>Vulgarisation de modèles mathématiques :</strong> L'intégration de l'Analyse en Composantes Principales (ACP) dans l'application permet de traduire des corrélations multidimensionnelles complexes en un simple graphique de similarité entre les États, valorisant ainsi un résultat technique auprès de décideurs.
+                    </p>
+                    <img src="../images/sae4.02-acp.png" alt="Visualisation de l'ACP dans l'application" class="evidence-image" style="max-width: 60%; margin: 1rem auto;">
+                    
+                    <p style="margin-top: 1rem;">
+                        <strong>Accéder à l'application en ligne :</strong> <a href="https://victor-morvan.shinyapps.io/dashboard_usa/" target="_blank">Dashboard USA</a>
+                    </p>
+                </div>
+
+                <div class="learning-box">
+                    <h4>Ce que j'ai appris</h4>
+                    <ul style="margin-left: 2rem;">
+                        <li><strong>Design interactif :</strong> Comprendre que la valorisation passe par l'interactivité. L'utilisateur doit pouvoir "jouer" avec la donnée pour se l'approprier.</li>
+                        <li><strong>Choix des visualisations :</strong> Savoir sélectionner le bon type de graphique (carte, histogramme, nuage de points) selon la nature de l'indicateur à mettre en valeur (AC23.03).</li>
+                        <li><strong>Focus utilisateur :</strong> Développer en gardant toujours à l'esprit la facilité d'utilisation et la compréhension visuelle pour l'interlocuteur final.</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section class="impact-section">
+            <h2>Bilan global : Valoriser en BUT2</h2>
+            <div class="section-divider"></div>
+            
+            <h3 style="font-size: 1.2rem; margin-top: 1rem;">Compétences acquises</h3>
+            <p>
+                Ces deux projets illustrent ma capacité à adapter ma communication selon le support et le public. J'ai appris à structurer un discours oral formel et percutant appuyé par des supports de présentation épurés (SAÉ 3.04), tout en développant de solides compétences en création de tableaux de bord interactifs capables de transformer des modèles statistiques en outils d'aide à la décision (SAÉ 4.02).
+            </p>
+
+            <h3 style="font-size: 1.2rem; margin-top: 1.5rem;">Progression</h3>
+            <p>
+                Je suis passé d'une simple description de graphiques statiques à une véritable démarche de **"Data Storytelling"**. Je comprends aujourd'hui qu'une analyse de données n'a de valeur que si elle est intelligible. Que ce soit en vulgarisant un concept juridique ou en concevant l'ergonomie d'une application Shiny, la rigueur de la communication est le pont indispensable entre la technique et les métiers.
+            </p>
+        </section>
+
+    </div>
+
+    <footer>
+        <p>&copy; 2026 - Portfolio de Valentin Geslin - BUT Sciences des Données</p>
+        <p style="margin-top: 0.5rem; font-size: 0.9rem;">
+            Contact : <a href="mailto:valentingeslin231@gmail.com">valentingeslin231@gmail.com</a> | 
+            LinkedIn : <a href="https://www.linkedin.com/in/valentin-geslin" target="_blank">Valentin Geslin</a> | 
+            <a href="../science-des-donn-es-30879.pdf" target="_blank">Programme national</a>
+        </p>
+    </footer>
+
+</body>
+</html>

@@ -1,0 +1,628 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Valoriser des résultats - BUT1 | Portfolio Valentin Geslin</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: #2f3640;
+            line-height: 1.6;
+            background-color: #ffffff;
+        }
+
+        /* Navigation */
+        nav {
+            background-color: #1f3c88;
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        nav > ul > li {
+            position: relative;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            transition: background-color 0.3s;
+            border-radius: 4px;
+            display: block;
+        }
+
+        nav a:hover {
+            background-color: #16a085;
+        }
+
+        /* Dropdown menu */
+        .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+
+        .dropdown > a {
+            cursor: pointer;
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: #1f3c88;
+            min-width: 220px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            border-radius: 4px;
+            margin-top: 0.3rem;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 0.5rem 0;
+        }
+
+        .dropdown::before {
+            content: '';
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            height: 0.8rem;
+            background: transparent;
+        }
+
+        .dropdown-content a {
+            padding: 0.75rem 1.5rem;
+            white-space: nowrap;
+        }
+
+        .dropdown-content a:hover {
+            background-color: #16a085;
+        }
+
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+
+        /* Header */
+        header {
+            background: linear-gradient(135deg, #1f3c88 0%, #16a085 100%);
+            color: white;
+            text-align: center;
+            padding: 3rem 1rem;
+        }
+
+        header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        /* Breadcrumb */
+        .breadcrumb {
+            background-color: #f1f2f6;
+            padding: 1rem;
+            text-align: center;
+            font-size: 0.95rem;
+        }
+
+        .breadcrumb a {
+            color: #16a085;
+            text-decoration: none;
+        }
+
+        .breadcrumb a:hover {
+            text-decoration: underline;
+        }
+
+        /* Container */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem 1rem;
+        }
+
+        /* Section */
+        section {
+            margin-bottom: 3rem;
+        }
+
+        section h2 {
+            color: #1f3c88;
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        section h3 {
+            color: #1f3c88;
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            margin-top: 2rem;
+        }
+
+        .section-divider {
+            width: 60px;
+            height: 3px;
+            background-color: #16a085;
+            margin-bottom: 1.5rem;
+        }
+
+        /* Definition Box */
+        .definition-box {
+            background: linear-gradient(135deg, #1f3c88 0%, #16a085 100%);
+            color: white;
+            padding: 2rem;
+            border-radius: 8px;
+            margin: 2rem 0;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .definition-box h3 {
+            color: white;
+            margin: 0 0 1rem 0;
+        }
+
+        /* Info note */
+        .info-note {
+            background-color: #e8f8f5;
+            padding: 1rem;
+            border-radius: 8px;
+            border-left: 4px solid #16a085;
+            margin: 1.5rem 0;
+            font-size: 0.95rem;
+        }
+
+        /* AC Card (inside SAE) */
+        .ac-card {
+            background-color: #f1f2f6;
+            padding: 1.5rem;
+            border-radius: 8px;
+            border-left: 4px solid #16a085;
+            margin: 1.5rem 0;
+        }
+
+        .ac-card h4 {
+            color: #1f3c88;
+            margin-bottom: 1rem;
+        }
+
+        .ac-card ul {
+            list-style-position: inside;
+            margin-left: 1rem;
+        }
+
+        .ac-card li {
+            margin: 0.5rem 0;
+            padding-left: 0.5rem;
+        }
+
+        /* SAE Section */
+        .sae-section {
+            background-color: white;
+            border: 2px solid #4a69bd;
+            border-radius: 8px;
+            padding: 2rem;
+            margin: 2rem 0;
+            position: relative;
+        }
+
+        .sae-section::before {
+            content: '';
+            position: absolute;
+            left: -6px;
+            top: 2rem;
+            width: 12px;
+            height: 12px;
+            background-color: #16a085;
+            border-radius: 50%;
+            box-shadow: 0 0 0 4px white, 0 0 0 6px #16a085;
+        }
+
+        .sae-header {
+            border-bottom: 2px solid #f1f2f6;
+            padding-bottom: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .sae-header h3 {
+            color: #1f3c88;
+            margin: 0 0 0.5rem 0;
+        }
+
+        .sae-tag {
+            display: inline-block;
+            background-color: #e8f8f5;
+            color: #16a085;
+            padding: 0.25rem 0.75rem;
+            border-radius: 4px;
+            font-size: 0.85rem;
+            font-weight: bold;
+            margin-right: 0.5rem;
+        }
+
+        /* Info Grid */
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+
+        .info-item {
+            background-color: #f1f2f6;
+            padding: 1rem;
+            border-radius: 6px;
+            border-left: 3px solid #16a085;
+        }
+
+        .info-item strong {
+            color: #1f3c88;
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+
+        /* Tools Badges */
+        .tools {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin: 1rem 0;
+        }
+
+        .tool-badge {
+            background-color: #1f3c88;
+            color: white;
+            padding: 0.4rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        /* Evidence Box */
+        .evidence-box {
+            background-color: #e8f8f5;
+            padding: 1.5rem;
+            border-radius: 8px;
+            border-left: 4px solid #16a085;
+            margin: 1.5rem 0;
+        }
+
+        .evidence-box h4 {
+            color: #1f3c88;
+            margin-bottom: 1rem;
+        }
+
+        .evidence-image {
+            max-width: 100%;
+            border-radius: 8px;
+            margin: 1rem 0;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+
+        /* Learning Box */
+        .learning-box {
+            background-color: #fef9f5;
+            padding: 1.5rem;
+            border-radius: 8px;
+            border-left: 4px solid #16a085;
+            margin: 1.5rem 0;
+        }
+
+        .learning-box h4 {
+            color: #1f3c88;
+            margin-bottom: 1rem;
+        }
+
+        /* Global Impact */
+        .impact-section {
+            background: linear-gradient(135deg, #f1f2f6 0%, #e8f8f5 100%);
+            padding: 2rem;
+            border-radius: 8px;
+            border-left: 4px solid #16a085;
+            margin-top: 3rem;
+        }
+
+        .impact-section h2 {
+            color: #1f3c88;
+            margin-bottom: 1rem;
+        }
+
+        /* Footer */
+        footer {
+            background-color: #2f3640;
+            color: white;
+            text-align: center;
+            padding: 2rem;
+            margin-top: 3rem;
+        }
+
+        footer a {
+            color: #16a085;
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 2rem;
+            }
+
+            nav ul {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+
+            .dropdown-content {
+                position: static;
+                box-shadow: none;
+                transform: none;
+                left: auto;
+            }
+
+            .info-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <ul>
+            <li><a href="../index.html">Accueil</a></li>
+            <li class="dropdown">
+                <a>BUT1 ▼</a>
+                <div class="dropdown-content">
+                    <a href="traiter-but1.html">Traiter</a>
+                    <a href="analyser-but1.html">Analyser</a>
+                    <a href="valoriser-but1.html">Valoriser</a>
+                </div>
+            </li>
+            <li class="dropdown">
+                <a>BUT2 ▼</a>
+                <div class="dropdown-content">
+                    <a href="../BUT2/traiter-but2.html">Traiter</a>
+                    <a href="../BUT2/analyser-but2.html">Analyser</a>
+                    <a href="../BUT2/valoriser-but2.html">Valoriser</a>
+                    <a href="../BUT2/modeliser-but2.html">Modéliser</a>
+                </div>
+            </li>
+            <li><a href="../stage.html">Stage</a></li>
+            <li><a href="../projection.html">Projection BUT3</a></li>
+        </ul>
+    </nav>
+
+    <header>
+        <h1>Valoriser des résultats</h1>
+        <p>BUT 1</p>
+    </header>
+
+    <div class="breadcrumb">
+        <a href="../index.html">Accueil</a> / <a href="../index.html#organisation">BUT1</a> / Valoriser des résultats
+    </div>
+
+    <div class="container">
+
+        <section>
+            <h2>Définition de la compétence</h2>
+            <div class="section-divider"></div>
+
+            <div class="definition-box">
+                <p>
+                    <strong>Valoriser des résultats</strong> consiste à rendre compréhensible une production ou un résultat, même lorsqu’il est technique ou complexe. Elle implique d’adapter son langage et ses supports au public visé, de structurer un message clair, et de mettre en valeur l’information essentielle.
+                </p>
+                <p style="margin-top: 1rem;">
+                    <strong>En BUT1</strong>, l'accent est mis sur l'acquisition de la culture de la donnée et la communication visuelle : choix des graphiques pertinents, respect des règles de présentation et capacité à restituer un travail d'analyse à l'écrit comme à l'oral.
+                </p>
+            </div>
+        </section>
+
+        <section>
+            <h2>Situations d'Apprentissage et d'Évaluation</h2>
+            <div class="section-divider"></div>
+
+            <div class="info-note">
+                <p>
+                    Pour illustrer cette compétence, je présente ici deux SAÉ représentatives de mon parcours en BUT1. J'ai également travaillé cette compétence dans les SAÉ 1.04, 1.05 et SAÉ 2.04, qui ont contribué à développer ma maîtrise de la valorisation de données.
+                </p>
+            </div>
+
+            <div class="sae-section">
+                <div class="sae-header">
+                    <h3>SAÉ 1.06 : Analyse d’un questionnaire et restitution pour le CPIE</h3>
+                    <div>
+                        <span class="sae-tag">Semestre 1</span>
+                        <span class="sae-tag">Groupe de 4</span>
+                        <span class="sae-tag">Enquête & Restitution</span>
+                    </div>
+                </div>
+
+                <div class="ac-card">
+                    <h4>Apprentissages Critiques mobilisés</h4>
+                    <ul>
+                        <li><strong>AC13.01 :</strong> Prendre connaissance des biais rencontrés dans la mise en place d'une enquête</li>
+                        <li><strong>AC13.02 :</strong> Identifier l'importance de contextualiser ses données</li>
+                        <li><strong>AC13.04 :</strong> Lors de la restitution des résultats, mesurer l'importance d'expliciter également la démarche suivie</li>
+                        <li><strong>AC13.05 :</strong> Comprendre les intérêts de la data visualisation et de l'infographie</li>
+                        <li><strong>AC13.06 :</strong> Mesurer l'importance d'une expression précise et nuancée dans la communication en français et dans une langue étrangère des résultats</li>
+                    </ul>
+                </div>
+
+                <h4 style="color: #1f3c88; margin-bottom: 1rem;">Description du projet</h4>
+                <p>
+                    Ce projet d’envergure, mené sur une période de 4 mois, consistait à piloter l'intégralité d'une démarche d'étude pour le CPIE de Belle-Île-en-Mer. Nous avons commencé par la phase de conception en élaborant un questionnaire rigoureux sur Sphinx, en veillant à la neutralité des questions et à la pertinence des échelles de mesure.
+
+Après la phase de récolte des données, j'ai réalisé un nettoyage approfondi des réponses sous Excel (traitement des données aberrantes, codage des questions ouvertes). L'étape finale a été la synthèse statistique des résultats bivariés pour extraire des préconisations concrètes, suivies d'une restitution orale devant le client pour l'aider dans sa stratégie de communication.
+                </p>
+
+                <div class="info-grid">
+                    <div class="info-item">
+                        <strong>Objectif</strong>
+                        <p>Concevoir une étude de A à Z et transformer des données brutes en leviers de décision pour un client réel.</p>
+                    </div>
+                    <div class="info-item">
+                        <strong>Durée</strong>
+                        <p>4 mois</p>
+                    </div>
+                    <div class="info-item">
+                        <strong>Mon apport personnel</strong>
+                        <p>Dans ce travail de groupe, j'ai participé à toute les parties du projet et me suis focalisé sur la valorisation graphique.</p>
+                    </div>
+                </div>
+
+                <div class="tools">
+                    <span class="tool-badge">Sphinx</span>
+                    <span class="tool-badge">Excel</span>
+                    <span class="tool-badge">PowerPoint</span>
+                </div>
+
+                <div class="evidence-box">
+                    <h4>Preuve : Analyse bivariée impactante</h4>
+                    <p>
+                        Pour garantir l'impact de nos résultats, j'ai particulièrement travaillé sur la DataViz sous Excel, en transformant des tableaux de contingence complexes en graphiques bivariés lisibles. Par exemple, en croisant la commune de résidence avec le niveau de connaissance du CPIE, nous avons pu identifier des zones géographiques précises où l'association manquait de visibilité. Cette preuve visuelle a été le point central de notre présentation, permettant au client de visualiser ses points faibles en un coup d'œil.
+                    </p>
+                    <img src="../images/sae1.06.png" alt="Analyse bivariée CPIE" class="evidence-image">
+
+                    <p style="margin-top: 1rem; font-weight: 600;">
+                        Livrables produits :
+                    </p>
+                    <ul style="margin-left: 2rem; margin-top: 0.5rem;">
+                        <li>Questionnaire en ligne</li>
+                        <li>Base de données traitée</li>
+                        <li>Rapport d'analyse bivariée</li>
+                        <li>Support de présentation client</li>
+                    </ul>
+                </div>
+
+                <div class="learning-box">
+                    <h4>Ce que j'ai appris et compétences développées</h4>
+                    <ul style="margin-left: 2rem; margin-top: 1rem;">
+                        <li><strong>Conception d'enquête professionnelle :</strong> Apprendre à utiliser Sphinx pour créer des scénarios de questions dynamiques et éviter les biais de réponse.</li>
+                        <li><strong>Rigueur du traitement sous Excel :</strong> Maîtriser le passage des données brutes (issues de l'export Sphinx) à une base de données propre, prête pour l'analyse statistique bivariée.</li>
+                        <li><strong>Storytelling et vulgarisation client :</strong> Apprendre à ne pas simplement "lire des chiffres", mais à raconter une histoire logique qui mène à des recommandations stratégiques pour le commanditaire.</li>
+                        <li><strong>Gestion de projet longue durée :</strong> Organiser le travail en équipe de 4 sur plusieurs mois pour respecter les échéances de livraison du rapport et de la présentation orale.</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="sae-section">
+                <div class="sae-header">
+                    <h3>SAÉ 2.05 : Jeu d'entreprise informatique (Terstrat)</h3>
+                    <div>
+                        <span class="sae-tag">Semestre 2</span>
+                        <span class="sae-tag">Groupe de 4</span>
+                        <span class="sae-tag">Simulations de gestion</span>
+                    </div>
+                </div>
+
+                <div class="ac-card">
+                    <h4>Apprentissages Critiques mobilisés</h4>
+                    <ul>
+                        <li><strong>AC13.02 :</strong> Identifier l'importance de contextualiser ses données</li>
+                        <li><strong>AC13.03 :</strong> Mesurer l'importance de mettre en évidence des résultats clés par l'utilisation d'indicateurs pertinents</li>
+                        <li><strong>AC13.04 :</strong> Lors de la restitution des résultats, mesurer l'importance d'expliciter également la démarche suivie</li>
+                        <li><strong>AC13.05 :</strong> Comprendre les intérêts de la data visualisation et de l'infographie</li>
+                    </ul>
+                </div>
+
+                <h4 style="color: #1f3c88; margin-bottom: 1rem;">Description du projet</h4>
+                <p>
+                    Dans ce projet, nous étions aux commandes d'une entreprise informatique fictive en concurrence directe avec d'autres groupes. Nous devions faire des choix stratégiques : vente, recrutement, budget publicité, tout en gérant des imprévus économiques (crises du secteur informatique).
+                </p>
+                <p style="margin-top: 1rem;">
+                    L'enjeu de valorisation était majeur : nous devions construire sur <strong>Excel</strong> un plan de gestion complet pour calculer nos marges, faire des prévisions de chiffre d'affaires et justifier nos stratégies (discount, luxe, fidélisation) afin de maximiser le bénéfice.
+                </p>
+
+                <div class="info-grid">
+                    <div class="info-item">
+                        <strong>Objectif</strong>
+                        <p>Piloter une stratégie commerciale et prévoir les résultats financiers via Excel.</p>
+                    </div>
+                    <div class="info-item">
+                        <strong>Stratégies gérées</strong>
+                        <p>Positionnement (Discount / Luxe), fidélisation client, gestion du personnel.</p>
+                    </div>
+                </div>
+
+                <div class="tools">
+                    <span class="tool-badge">Excel</span>
+                    <span class="tool-badge">Power BI</span>
+                </div>
+
+                <div class="evidence-box">
+                    <h4>Preuve 1 : Analyse Excel des performances financières</h4>
+                    <p>
+                        Cette feuille Excel montre les calculs de marges, les prévisions de chiffre d'affaires et l'impact des stratégies sur les bénéfices. Elle servait de base pour justifier nos décisions stratégiques auprès des autres groupes.
+                    </p>
+                    <img src="../images/sae2.05-excel.png" alt="Analyse Excel SAE 2.05" class="evidence-image">
+
+                    <h4 style="margin: 1.5rem 0 1rem 0;">Preuve 2 : Dashboard Power BI de visualisation</h4>
+                    <p>
+                        Le dashboard Power BI permettait de visualiser en temps réel l'évolution des parts de marché, des ventes par segment et des indicateurs clés de performance. Cela facilitait la prise de décision rapide pendant les simulations.
+                    </p>
+                    <img src="../images/sae2.05-graph.png" alt="Dashboard Power BI SAE 2.05" class="evidence-image">
+                </div>
+
+                <div class="learning-box">
+                    <h4>Ce que j'ai appris et compétences développées</h4>
+                    <ul style="margin-left: 2rem; margin-top: 1rem;">
+                        <li><strong>Pilotage stratégique et prise de décision :</strong> J'ai appris à traduire une stratégie commerciale, comme le positionnement luxe ou discount, en décisions concrètes. Ce projet m'a montré comment l'équilibre entre les investissements en personnel ou publicité et les prix de vente impacte la rentabilité face à la concurrence.</li>
+                        <li><strong>Modélisation technico-économique sous Excel :</strong> J'ai développé des compétences en construction de tableaux de bord. J'ai appris à concevoir des plans de prévisions pour anticiper le chiffre d'affaires et surveiller les marges tout en intégrant les événements imprévus du marché informatique.</li>
+                        <li><strong>Analyse de performance et indicateurs clés :</strong> Ce travail m'a permis de maîtriser l'utilité des indicateurs de performance comme le bénéfice net et les parts de marché. J'ai appris à analyser les résultats de chaque période pour ajuster notre stratégie de fidélisation et optimiser la gestion des effectifs.</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section class="impact-section">
+            <h2>Bilan global : Ce que ces SAÉ m'ont apporté</h2>
+            <div class="section-divider"></div>
+            
+            <h3 style="font-size: 1.2rem; margin-top: 1rem;">Compétences acquises</h3>
+            <p>
+                Ces deux SAÉ m'ont permis de comprendre que la valorisation est le pont entre l'analyse technique et la décision métier. De l'enquête de terrain (SAÉ 1.06) au simulateur de gestion (SAÉ 2.05), j'ai appris à transformer des bases de données brutes en supports visuels et argumentés qui apportent une réelle valeur ajoutée aux décideurs.
+            </p>
+
+            <h3 style="font-size: 1.2rem; margin-top: 1.5rem;">Progression</h3>
+            <p>
+                Je suis passé d'une simple présentation de chiffres à une véritable démarche de valorisation de l'information. Je maîtrise désormais le choix des outils (Excel, PowerPoint, Sphinx) pour structurer un message percutant, adapter le niveau de détail au public visé et transformer des analyses complexes en leviers d'action concrets.
+            </p>
+        </section>
+
+    </div>
+
+    <footer>
+        <p>&copy; 2026 - Portfolio de Valentin Geslin - BUT Sciences des Données</p>
+        <p style="margin-top: 0.5rem; font-size: 0.9rem;">
+            Contact : <a href="mailto:valentingeslin231@gmail.com">valentingeslin231@gmail.com</a> | 
+            LinkedIn : <a href="https://www.linkedin.com/in/valentin-geslin" target="_blank">Valentin Geslin</a> | 
+            <a href="../science-des-donn-es-30879.pdf" target="_blank">Programme national</a>
+        </p>
+    </footer>
+
+</body>
+</html>

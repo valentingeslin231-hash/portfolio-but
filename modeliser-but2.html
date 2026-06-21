@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modéliser des données (EMS) - BUT2 | Portfolio Valentin Geslin</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: #2f3640;
+            line-height: 1.6;
+            background-color: #ffffff;
+        }
+
+        /* Navigation */
+        nav {
+            background-color: #1f3c88;
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        nav > ul > li {
+            position: relative;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            transition: background-color 0.3s;
+            border-radius: 4px;
+            display: block;
+        }
+
+        nav a:hover {
+            background-color: #16a085;
+        }
+
+        /* Dropdown menu */
+        .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+
+        .dropdown > a {
+            cursor: pointer;
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: #1f3c88;
+            min-width: 220px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            border-radius: 4px;
+            margin-top: 0.3rem;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 0.5rem 0;
+        }
+
+        .dropdown::before {
+            content: '';
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            height: 0.8rem;
+            background: transparent;
+        }
+
+        .dropdown-content a {
+            padding: 0.75rem 1.5rem;
+            white-space: nowrap;
+        }
+
+        .dropdown-content a:hover {
+            background-color: #16a085;
+        }
+
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+
+        /* Header */
+        header {
+            background: linear-gradient(135deg, #1f3c88 0%, #16a085 100%);
+            color: white;
+            text-align: center;
+            padding: 3rem 1rem;
+        }
+
+        header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        /* Breadcrumb */
+        .breadcrumb {
+            background-color: #f1f2f6;
+            padding: 1rem;
+            text-align: center;
+            font-size: 0.95rem;
+        }
+
+        .breadcrumb a {
+            color: #16a085;
+            text-decoration: none;
+        }
+
+        .breadcrumb a:hover {
+            text-decoration: underline;
+        }
+
+        /* Container */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem 1rem;
+        }
+
+        /* Section */
+        section {
+            margin-bottom: 3rem;
+        }
+
+        section h2 {
+            color: #1f3c88;
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        section h3 {
+            color: #1f3c88;
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            margin-top: 2rem;
+        }
+
+        .section-divider {
+            width: 60px;
+            height: 3px;
+            background-color: #16a085;
+            margin-bottom: 1.5rem;
+        }
+
+        /* Definition Box */
+        .definition-box {
+            background: linear-gradient(135deg, #1f3c88 0%, #16a085 100%);
+            color: white;
+            padding: 2rem;
+            border-radius: 8px;
+            margin: 2rem 0;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        /* Info note */
+        .info-note {
+            background-color: #e8f8f5;
+            padding: 1rem;
+            border-radius: 8px;
+            border-left: 4px solid #16a085;
+            margin: 1.5rem 0;
+            font-size: 0.95rem;
+        }
+
+        /* AC Card */
+        .ac-card {
+            background-color: #f1f2f6;
+            padding: 1.5rem;
+            border-radius: 8px;
+            border-left: 4px solid #16a085;
+            margin: 1.5rem 0;
+        }
+
+        .ac-card h4 {
+            color: #1f3c88;
+            margin-bottom: 1rem;
+        }
+
+        .ac-card ul {
+            list-style-type: disc;
+            list-style-position: inside;
+            margin-left: 0.5rem;
+        }
+
+        .ac-card li {
+            margin: 0.5rem 0;
+            padding-left: 0.25rem;
+        }
+
+        /* SAE Section */
+        .sae-section {
+            background-color: white;
+            border: 2px solid #4a69bd;
+            border-radius: 8px;
+            padding: 2rem;
+            margin: 2rem 0;
+            position: relative;
+        }
+
+        .sae-section::before {
+            content: '';
+            position: absolute;
+            left: -6px;
+            top: 2rem;
+            width: 12px;
+            height: 12px;
+            background-color: #16a085;
+            border-radius: 50%;
+            box-shadow: 0 0 0 4px white, 0 0 0 6px #16a085;
+        }
+
+        .sae-header {
+            border-bottom: 2px solid #f1f2f6;
+            padding-bottom: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .sae-header h3 {
+            color: #1f3c88;
+            margin: 0 0 0.5rem 0;
+        }
+
+        .sae-tag {
+            display: inline-block;
+            background-color: #e8f8f5;
+            color: #16a085;
+            padding: 0.25rem 0.75rem;
+            border-radius: 4px;
+            font-size: 0.85rem;
+            font-weight: bold;
+            margin-right: 0.5rem;
+        }
+
+        /* Info Grid */
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+
+        .info-item {
+            background-color: #f1f2f6;
+            padding: 1rem;
+            border-radius: 6px;
+            border-left: 3px solid #16a085;
+        }
+
+        .info-item strong {
+            color: #1f3c88;
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+
+        /* Tools Badges */
+        .tools {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin: 1rem 0;
+        }
+
+        .tool-badge {
+            background-color: #1f3c88;
+            color: white;
+            padding: 0.4rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        /* Evidence Box */
+        .evidence-box {
+            background-color: #e8f8f5;
+            padding: 1.5rem;
+            border-radius: 8px;
+            border-left: 4px solid #16a085;
+            margin: 1.5rem 0;
+        }
+
+        .evidence-box h4 {
+            color: #1f3c88;
+            margin-bottom: 1rem;
+        }
+
+        .evidence-image {
+            max-width: 100%;
+            border-radius: 8px;
+            margin: 1rem 0;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            display: block;
+        }
+
+        /* Learning Box */
+        .learning-box {
+            background-color: #fef9f5;
+            padding: 1.5rem;
+            border-radius: 8px;
+            border-left: 4px solid #16a085;
+            margin: 1.5rem 0;
+        }
+
+        .learning-box h4 {
+            color: #1f3c88;
+            margin-bottom: 1rem;
+        }
+
+        /* Global Impact */
+        .impact-section {
+            background: linear-gradient(135deg, #f1f2f6 0%, #e8f8f5 100%);
+            padding: 2rem;
+            border-radius: 8px;
+            border-left: 4px solid #16a085;
+            margin-top: 3rem;
+        }
+
+        .impact-section h2 {
+            color: #1f3c88;
+            margin-bottom: 1rem;
+        }
+
+        /* Footer */
+        footer {
+            background-color: #2f3640;
+            color: white;
+            text-align: center;
+            padding: 2rem;
+            margin-top: 3rem;
+        }
+
+        footer a {
+            color: #16a085;
+            text-decoration: none;
+        }
+
+        @media (max-width: 768px) {
+            header h1 { font-size: 2rem; }
+            nav ul { flex-direction: column; gap: 0.5rem; }
+            .dropdown-content { position: static; transform: none; box-shadow: none; }
+            .info-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <ul>
+            <li><a href="../index.html">Accueil</a></li>
+            <li class="dropdown">
+                <a>BUT1 ▼</a>
+                <div class="dropdown-content">
+                    <a href="../BUT1/traiter-but1.html">Traiter</a>
+                    <a href="../BUT1/analyser-but1.html">Analyser</a>
+                    <a href="../BUT1/valoriser-but1.html">Valoriser</a>
+                </div>
+            </li>
+            <li class="dropdown">
+                <a>BUT2 ▼</a>
+                <div class="dropdown-content">
+                    <a href="traiter-but2.html">Traiter</a>
+                    <a href="analyser-but2.html">Analyser</a>
+                    <a href="valoriser-but2.html">Valoriser</a>
+                    <a href="modeliser-but2.html">Modéliser</a>
+                </div>
+            </li>
+            <li><a href="../stage.html">Stage</a></li>
+            <li><a href="../projection.html">Projection BUT3</a></li>
+        </ul>
+    </nav>
+
+    <header>
+        <h1>Modéliser des données</h1>
+        <p>BUT 2 - Parcours EMS</p>
+    </header>
+
+    <div class="breadcrumb">
+        <a href="../index.html">Accueil</a> / <a href="../index.html#organisation">BUT2</a> / Modéliser des données (EMS)
+    </div>
+
+    <div class="container">
+
+        <section>
+            <h2>Définition de la compétence</h2>
+            <div class="section-divider"></div>
+
+            <div class="definition-box">
+                <p>
+                    <strong>Modéliser des données</strong> (spécifique au parcours EMS - Exploration et Modélisation Statistique) consiste à concevoir et évaluer des modèles mathématiques et statistiques pour représenter des phénomènes, tester des hypothèses et anticiper des comportements futurs.
+                </p>
+                <p style="margin-top: 1rem;">
+                    <strong>En BUT2</strong>, cette compétence intègre une dimension fondamentale : <strong>la collecte</strong>. L'accent est mis sur la planification du recueil de données (sondages, plans d'échantillonnage), la gestion des biais inhérents au terrain (non-réponses, données manquantes), et la compréhension de l'impact de la qualité des données récoltées sur le choix et la validité de la modélisation finale.
+                </p>
+            </div>
+        </section>
+
+        <section>
+            <h2>Situations d'Apprentissage et d'Évaluation</h2>
+            <div class="section-divider"></div>
+
+            <div class="info-note">
+                <p>
+                    Pour illustrer cette compétence propre au parcours EMS, je présente ici deux SAÉ. La première montre l'importance critique du recueil des données en amont (théorie des sondages), tandis que la seconde illustre la mise en pratique mathématique de la modélisation sur des données complexes.
+                </p>
+            </div>
+
+            <div class="sae-section">
+                <div class="sae-header">
+                    <h3>SAÉ 3.01 : Recueil et analyse de données par échantillonnage (Projet Valpena)</h3>
+                    <div>
+                        <span class="sae-tag">Semestre 3</span>
+                        <span class="sae-tag">Travail de groupe</span>
+                    </div>
+                </div>
+
+                <div class="ac-card">
+                    <h4>Apprentissages Critiques mobilisés</h4>
+                    <ul>
+                        <li><strong>AC24.01EMS :</strong> Comprendre l’intérêt de planifier le recueil des données</li>
+                        <li><strong>AC24.02EMS :</strong> Appréhender les difficultés et les limites rencontrées dans la mise en œuvre d’un terrain de collecte</li>
+                        <li><strong>AC24.03EMS :</strong> Comprendre l’impact du type de données sur le choix de la modélisation à mettre en œuvre</li>
+                    </ul>
+                </div>
+
+                <h4 style="color: #1f3c88; margin-bottom: 1rem;">Description du projet</h4>
+                <p>
+                    Cette SAÉ s'est découpée en plusieurs travaux distincts tout au long du semestre pour aborder toutes les facettes du recueil de données. Nous avons notamment mené une analyse critique d'un article de Statistique Canada sur la fiabilité des panels non probabilistes en ligne, et construit un indice d'abondance à partir de données de campagnes océanographiques. 
+                </p>
+                <p style="margin-top: 1rem;">
+                    Pour mon portfolio, j'ai choisi de mettre en lumière notre travail le plus approfondi : <strong>le projet Valpena</strong>. L'objectif était d'utiliser la théorie des sondages pour construire un Plan d'Échantillonnage (PE) permettant de spatialiser les activités de la flotte de pêche professionnelle en Bretagne. Plutôt que d'interroger toute la flotte de manière exhaustive, nous avons dû concevoir un plan garantissant des estimations statistiques précises tout en minimisant l'effort d'enquête sur le terrain.
+                </p>
+
+                <div class="info-grid">
+                    <div class="info-item">
+                        <strong>Objectif</strong>
+                        <p>Préparer, planifier et redresser une collecte de données exploitable statistiquement (Théorie des sondages).</p>
+                    </div>
+                    <div class="info-item">
+                        <strong>Livrables</strong>
+                        <p>Rapports méthodologiques, fiches de synthèse, et scripts R de simulation de tirages.</p>
+                    </div>
+                </div>
+
+                <div class="tools">
+                    <span class="tool-badge">R</span>
+                </div>
+
+                <div class="evidence-box">
+                    <h4>Preuves de planification et de collecte</h4>
+                    <p style="margin-bottom: 1rem;">
+                        <strong>Élaboration du plan d'échantillonnage :</strong> L'extrait ci-dessous illustre notre démarche pour stratifier la population de navires. Nous avons appliqué des méthodes d'allocation pour calculer le nombre d'enquêtes nécessaires dans chaque strate, tout en gérant le poids des navires et en anticipant le traitement délicat des données manquantes (refus de répondre, navires atypiques).
+                    </p>
+                    <img src="../images/sae3.01-valpena-stratification.png" alt="Extrait de la méthode de stratification et de pondération - Projet Valpena" class="evidence-image" style="max-width: 60%; margin: 1rem auto;">
+                    
+                    <p style="margin-top: 1.5rem; margin-bottom: 1rem;">
+                        <strong>Compromis entre précision et contraintes terrain :</strong> Une part majeure de l'étude a consisté à simuler plusieurs tirages d'échantillons sous R. Il a fallu analyser l'impact du regroupement de strates et du taux de précision choisi afin de trouver l'équilibre parfait entre un grand nombre d'enquêtes coûteuses à réaliser et la qualité / fiabilité de nos estimations finales pour modéliser le comportement de la flotte.
+                    </p>
+                    <img src="../images/sae3.01-valpena-simulations.png" alt="Simulation des tirages PE et qualité des estimations" class="evidence-image" style="max-width: 60%; margin: 1rem auto;">
+                </div>
+
+                <div class="learning-box">
+                    <h4>Ce que j'ai appris</h4>
+                    <ul style="margin-left: 2rem;">
+                        <li><strong>Le "Garbage In, Garbage Out" :</strong> J'ai compris concrètement qu'un modèle prédictif ou qu'une analyse, aussi complexes soient-ils, ne valent rien si les données récoltées sur le terrain souffrent de biais d'échantillonnage.</li>
+                        <li><strong>Théorie des sondages :</strong> Maîtriser la stratification, l'allocation proportionnelle et le calcul des poids de redressement pour corriger la non-réponse.</li>
+                        <li><strong>Réalité du terrain :</strong> Savoir ajuster un plan de collecte purement théorique pour l'adapter aux contraintes réelles (budget, temps, accès difficile à certaines populations).</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="sae-section">
+                <div class="sae-header">
+                    <h3>SAÉ 4.01 : Modélisation statistique de la valeur marchande des footballeurs</h3>
+                    <div>
+                        <span class="sae-tag">Semestre 4</span>
+                        <span class="sae-tag">Groupe de 4</span>
+                    </div>
+                </div>
+
+                <div class="ac-card">
+                    <h4>Apprentissages Critiques mobilisés</h4>
+                    <ul>
+                        <li><strong>AC22.01 :</strong> Prendre conscience de la différence entre modélisation statistique et analyse exploratoire</li>
+                        <li><strong>AC22.04 :</strong> Appréhender l’idée de confronter une hypothèse avec la réalité pour prendre une décision</li>
+                        <li><strong>AC22.05 :</strong> Apprécier les limites de validité et les conditions d’application d’une analyse</li>
+                    </ul>
+                </div>
+
+                <h4 style="color: #1f3c88; margin-bottom: 1rem;">Description du projet</h4>
+                <p>
+                    Ce projet consistait à identifier et modéliser les principaux facteurs qui expliquent la valeur marchande des footballeurs évoluant dans les 5 plus grands championnats européens (Premier League, La Liga, Ligue 1, Serie A, Bundesliga). 
+                </p>
+                <p style="margin-top: 1rem;">
+                    Dans un contexte où le marché des transferts subit une forte inflation, notre équipe a utilisé la data (statistiques avancées comme les Expected Goals, pourcentages de tacles réussis, etc.) pour évaluer la performance réelle d'un joueur, bien au-delà des simples observations visuelles, et modéliser sa valeur comme un véritable actif financier.
+                </p>
+
+                <div class="info-grid">
+                    <div class="info-item">
+                        <strong>Objectif</strong>
+                        <p>Définir, justifier et mettre en œuvre une stratégie de sélection de variables pour comparer des modèles statistiques complexes.</p>
+                    </div>
+                    <div class="info-item">
+                        <strong>Livrables</strong>
+                        <p>Notebook R HTML, Présentation Orale avec support PowerPoint autoportant, et Rapport final de l'étude.</p>
+                    </div>
+                    <div class="info-item">
+                        <strong>Durée</strong>
+                        <p>2 mois</p>
+                    </div>
+                </div>
+
+                <div class="tools">
+                    <span class="tool-badge">R (Notebook)</span>
+                    <span class="tool-badge">Modélisation Statistique</span>
+                </div>
+
+                <div class="evidence-box">
+                    <h4>Preuves et Démarche de réalisation</h4>
+                    <p style="margin-bottom: 1rem;">
+                        <strong>Pré-traitement et Analyse Exploratoire :</strong><br>
+                        Le travail a commencé par le nettoyage et la préparation des données via un Notebook R. Nous avons dû mener une analyse exploratoire approfondie pour comprendre la distribution de nos nombreuses variables (physiques, financières et statistiques en match) avant toute tentative de modélisation.
+                    </p>
+                    <img src="../images/sae4.01-cha.png" alt="Extrait de l'analyse exploratoire sous R" class="evidence-image" style="max-width: 60%; margin: 1rem auto;">
+                    
+                    <p style="margin-top: 1.5rem; margin-bottom: 1rem;">
+                        <strong>Modélisation avancée et Restitution :</strong><br>
+                        Ensuite, nous avons confronté nos hypothèses à la réalité des données en appliquant une stratégie rigoureuse de sélection de variables et en comparant plusieurs modèles. Nous avons dû restituer et défendre l'ensemble de ces résultats techniques devant un jury lors d'une présentation de 10 minutes, appuyée par un support autoportant de qualité professionnelle.
+                    </p>
+                    <img src="../images/sae4.01-presentation.png" alt="Extrait du diaporama autoportant" class="evidence-image" style="max-width: 60%; margin: 1rem auto;">
+                </div>
+
+                <div class="learning-box">
+                    <h4>Ce que j'ai appris</h4>
+                    <ul style="margin-left: 2rem;">
+                        <li><strong>Sélection de variables :</strong> J'ai appris à justifier mathématiquement le choix des variables introduites dans un modèle complexe pour éviter le surapprentissage.</li>
+                        <li><strong>De l'exploration à la modélisation :</strong> J'ai pleinement pris conscience de la frontière entre observer des données existantes (statistiques de joueurs) et créer un modèle capable de prédire une variable cible (la valeur marchande).</li>
+                        <li><strong>Esprit critique :</strong> L'étape de modélisation nous a forcé à confronter nos résultats aux limites de nos propres données et à les assumer lors de la soutenance.</li>
+                    </ul>
+                </div>
+            </div>
+
+        </section>
+
+        <section class="impact-section">
+            <h2>Bilan global : Modéliser en EMS (BUT2)</h2>
+            <div class="section-divider"></div>
+            
+            <h3 style="font-size: 1.2rem; margin-top: 1rem;">Compétences acquises</h3>
+            <p>
+                Ce parcours spécifique m'a permis de comprendre que la modélisation statistique n'est pas qu'une question de code ou d'équations. C'est une démarche globale qui commence dès le terrain. De la planification rigoureuse d'une collecte de données via la théorie des sondages (SAÉ 3.01) jusqu'à la mise en œuvre d'une stratégie de sélection de variables et la comparaison de modèles statistiques complexes pour estimer la valeur de footballeurs (SAÉ 4.01), je maîtrise désormais la chaîne de construction d'un modèle fiable.
+            </p>
+
+            <h3 style="font-size: 1.2rem; margin-top: 1.5rem;">Progression</h3>
+            <p>
+                Ma principale progression a été de développer un fort esprit critique face à la donnée brute. Je sais identifier les biais d'échantillonnage, comprendre comment le traitement de la non-réponse impactera mes estimations, et confronter mathématiquement mes hypothèses pour m'assurer que le modèle reflète la réalité sans être faussé par ses propres limites.
+            </p>
+        </section>
+
+    </div>
+
+    <footer>
+        <p>&copy; 2026 - Portfolio de Valentin Geslin - BUT Sciences des Données</p>
+        <p style="margin-top: 0.5rem; font-size: 0.9rem;">
+            Contact : <a href="mailto:valentingeslin231@gmail.com">valentingeslin231@gmail.com</a> | 
+            LinkedIn : <a href="https://www.linkedin.com/in/valentin-geslin" target="_blank">Valentin Geslin</a> | 
+            <a href="../science-des-donn-es-30879.pdf" target="_blank">Programme national</a>
+        </p>
+    </footer>
+
+</body>
+</html>

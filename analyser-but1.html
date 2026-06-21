@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analyser statistiquement les données - BUT1 | Portfolio Valentin Geslin</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: #2f3640;
+            line-height: 1.6;
+            background-color: #ffffff;
+        }
+
+        /* Navigation */
+        nav {
+            background-color: #1f3c88;
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        nav > ul > li {
+            position: relative;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            transition: background-color 0.3s;
+            border-radius: 4px;
+            display: block;
+        }
+
+        nav a:hover {
+            background-color: #16a085;
+        }
+
+        /* Dropdown menu */
+        .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+
+        .dropdown > a {
+            cursor: pointer;
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: #1f3c88;
+            min-width: 220px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            border-radius: 4px;
+            margin-top: 0.3rem;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 0.5rem 0;
+        }
+
+        .dropdown::before {
+            content: '';
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            height: 0.8rem;
+            background: transparent;
+        }
+
+        .dropdown-content a {
+            padding: 0.75rem 1.5rem;
+            white-space: nowrap;
+        }
+
+        .dropdown-content a:hover {
+            background-color: #16a085;
+        }
+
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+
+        /* Header */
+        header {
+            background: linear-gradient(135deg, #1f3c88 0%, #16a085 100%);
+            color: white;
+            text-align: center;
+            padding: 3rem 1rem;
+        }
+
+        header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        /* Breadcrumb */
+        .breadcrumb {
+            background-color: #f1f2f6;
+            padding: 1rem;
+            text-align: center;
+            font-size: 0.95rem;
+        }
+
+        .breadcrumb a {
+            color: #16a085;
+            text-decoration: none;
+        }
+
+        .breadcrumb a:hover {
+            text-decoration: underline;
+        }
+
+        /* Container */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem 1rem;
+        }
+
+        /* Section */
+        section {
+            margin-bottom: 3rem;
+        }
+
+        section h2 {
+            color: #1f3c88;
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        section h3 {
+            color: #1f3c88;
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            margin-top: 2rem;
+        }
+
+        .section-divider {
+            width: 60px;
+            height: 3px;
+            background-color: #16a085;
+            margin-bottom: 1.5rem;
+        }
+
+        /* Definition Box */
+        .definition-box {
+            background: linear-gradient(135deg, #1f3c88 0%, #16a085 100%);
+            color: white;
+            padding: 2rem;
+            border-radius: 8px;
+            margin: 2rem 0;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .definition-box h3 {
+            color: white;
+            margin: 0 0 1rem 0;
+        }
+
+        /* Info note */
+        .info-note {
+            background-color: #e8f8f5;
+            padding: 1rem;
+            border-radius: 8px;
+            border-left: 4px solid #16a085;
+            margin: 1.5rem 0;
+            font-size: 0.95rem;
+        }
+
+        /* AC Card */
+        .ac-card {
+            background-color: #f1f2f6;
+            padding: 1.5rem;
+            border-radius: 8px;
+            border-left: 4px solid #16a085;
+            margin: 1.5rem 0;
+        }
+
+        .ac-card h4 {
+            color: #1f3c88;
+            margin-bottom: 1rem;
+        }
+
+        .ac-card ul {
+            list-style-position: inside;
+            margin-left: 1rem;
+        }
+
+        .ac-card li {
+            margin: 0.5rem 0;
+            padding-left: 0.5rem;
+        }
+
+        /* SAE Section */
+        .sae-section {
+            background-color: white;
+            border: 2px solid #4a69bd;
+            border-radius: 8px;
+            padding: 2rem;
+            margin: 2rem 0;
+            position: relative;
+        }
+
+        .sae-section::before {
+            content: '';
+            position: absolute;
+            left: -6px;
+            top: 2rem;
+            width: 12px;
+            height: 12px;
+            background-color: #16a085;
+            border-radius: 50%;
+            box-shadow: 0 0 0 4px white, 0 0 0 6px #16a085;
+        }
+
+        .sae-header {
+            border-bottom: 2px solid #f1f2f6;
+            padding-bottom: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .sae-header h3 {
+            color: #1f3c88;
+            margin: 0 0 0.5rem 0;
+        }
+
+        .sae-tag {
+            display: inline-block;
+            background-color: #e8f8f5;
+            color: #16a085;
+            padding: 0.25rem 0.75rem;
+            border-radius: 4px;
+            font-size: 0.85rem;
+            font-weight: bold;
+            margin-right: 0.5rem;
+        }
+
+        /* Info Grid */
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+
+        .info-item {
+            background-color: #f1f2f6;
+            padding: 1rem;
+            border-radius: 6px;
+            border-left: 3px solid #16a085;
+        }
+
+        .info-item strong {
+            color: #1f3c88;
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+
+        /* Tools Badges */
+        .tools {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin: 1rem 0;
+        }
+
+        .tool-badge {
+            background-color: #1f3c88;
+            color: white;
+            padding: 0.4rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        /* Evidence Box */
+        .evidence-box {
+            background-color: #e8f8f5;
+            padding: 1.5rem;
+            border-radius: 8px;
+            border-left: 4px solid #16a085;
+            margin: 1.5rem 0;
+        }
+
+        .evidence-box h4 {
+            color: #1f3c88;
+            margin-bottom: 1rem;
+        }
+
+        .evidence-image {
+            max-width: 100%;
+            border-radius: 8px;
+            margin: 1rem 0;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+
+        /* Learning Box */
+        .learning-box {
+            background-color: #fef9f5;
+            padding: 1.5rem;
+            border-radius: 8px;
+            border-left: 4px solid #16a085;
+            margin: 1.5rem 0;
+        }
+
+        .learning-box h4 {
+            color: #1f3c88;
+            margin-bottom: 1rem;
+        }
+
+        /* Global Impact */
+        .impact-section {
+            background: linear-gradient(135deg, #f1f2f6 0%, #e8f8f5 100%);
+            padding: 2rem;
+            border-radius: 8px;
+            border-left: 4px solid #16a085;
+            margin-top: 3rem;
+        }
+
+        .impact-section h2 {
+            color: #1f3c88;
+            margin-bottom: 1rem;
+        }
+
+        /* Footer */
+        footer {
+            background-color: #2f3640;
+            color: white;
+            text-align: center;
+            padding: 2rem;
+            margin-top: 3rem;
+        }
+
+        footer a {
+            color: #16a085;
+            text-decoration: none;
+        }
+
+        @media (max-width: 768px) {
+            header h1 { font-size: 2rem; }
+            nav ul { flex-direction: column; gap: 0.5rem; }
+            .dropdown-content { position: static; transform: none; box-shadow: none; }
+            .info-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <ul>
+            <li><a href="../index.html">Accueil</a></li>
+            <li class="dropdown">
+                <a>BUT1 ▼</a>
+                <div class="dropdown-content">
+                    <a href="traiter-but1.html">Traiter</a>
+                    <a href="analyser-but1.html">Analyser</a>
+                    <a href="valoriser-but1.html">Valoriser</a>
+                </div>
+            </li>
+            <li class="dropdown">
+                <a>BUT2 ▼</a>
+                <div class="dropdown-content">
+                    <a href="../BUT2/traiter-but2.html">Traiter</a>
+                    <a href="../BUT2/analyser-but2.html">Analyser</a>
+                    <a href="../BUT2/valoriser-but2.html">Valoriser</a>
+                    <a href="../BUT2/modeliser-but2.html">Modéliser</a>
+                </div>
+            </li>
+            <li><a href="../stage.html">Stage</a></li>
+            <li><a href="../projection.html">Projection BUT3</a></li>
+        </ul>
+    </nav>
+
+    <header>
+        <h1>Analyser statistiquement les données</h1>
+        <p>BUT 1</p>
+    </header>
+
+    <div class="breadcrumb">
+        <a href="../index.html">Accueil</a> / <a href="../index.html#organisation">BUT1</a> / Analyser les données
+    </div>
+
+    <div class="container">
+
+        <section>
+            <h2>Définition de la compétence</h2>
+            <div class="section-divider"></div>
+
+            <div class="definition-box">
+                <p>
+                    <strong>Analyser statistiquement les données</strong> consiste à utiliser des méthodes statistiques pour extraire du sens à partir de données, repérer des tendances ou tester des hypothèses. Elle repose sur le choix des bons outils, la rigueur dans l’analyse, et la capacité à interpréter les résultats de manière claire et pertinente.
+                </p>
+                <p style="margin-top: 1rem;">
+                    <strong>En BUT1</strong>, l'accent est mis sur les fondamentaux : mise en œuvre d'analyses descriptives pour synthétiser l'information, compréhension de la fluctuation d'échantillonnage par la simulation, et initiation aux modèles probabilistes pour l'estimation de paramètres.
+                </p>
+            </div>
+        </section>
+
+        <section>
+            <h2>Situations d'Apprentissage et d'Évaluation</h2>
+            <div class="section-divider"></div>
+
+            <div class="info-note">
+                <p>
+                    Pour illustrer cette compétence, je présente ici deux SAÉ représentatives de mon parcours en BUT1. J'ai également travaillé cette compétence dans les SAÉ 2.03 et SAÉ 2.04, qui ont contribué à développer ma maîtrise de l'analyse de données.
+                </p>
+            </div>
+
+            <div class="sae-section">
+                <div class="sae-header">
+                    <h3>SAÉ 1.03 : Préparation et synthèse d'un tableau de données en vue d'une analyse exploratoire simple</h3>
+                    <div>
+                        <span class="sae-tag">Semestre 1</span>
+                        <span class="sae-tag">Groupe de 3</span>
+                    </div>
+                </div>
+
+                <div class="ac-card">
+                    <h4>Apprentissages Critiques mobilisés</h4>
+                    <ul>
+                        <li><strong>AC12.01 :</strong> Réaliser que les sources de données ont des caractéristiques propres à considérer (variation, précision, mise à jour...)</li>
+                        <li><strong>AC12.02 :</strong> Comprendre qu’une analyse correcte ne peut émaner que de données propres et préparées</li>                        <li><strong>AC12.03 :</strong> Comprendre l'intérêt des synthèses numériques et graphiques pour décrire une variable statistique</li>
+                        <li><strong>AC12.04 :</strong> Comprendre l'intérêt des synthèses numériques et graphiques pour mettre en évidence des liaisons entre variables</li>                    </ul>
+                </div>
+
+                <h4 style="color: #1f3c88; margin-bottom: 1rem;">Description du projet</h4>
+                <p>
+                    Ce projet consistait à réaliser une analyse critique d’un rapport statistique à partir d’un article portant sur le budget de l'éducation (7% du PIB). L’objectif était de s’approprier la culture de la donnée en identifiant les enjeux métiers derrière les chiffres et en évaluant la pertinence des représentations graphiques.
+                </p>
+
+                <div class="info-grid">
+                    <div class="info-item">
+                        <strong>Objectif</strong>
+                        <p>Identifier les enjeux métiers et critiquer la forme d'un rapport statistique officiel</p>
+                    </div>
+                    <div class="info-item">
+                        <strong>Durée</strong>
+                        <p>4 semaines - Novembre 2024</p>
+                    </div>
+                    <div class="info-item">
+                        <strong>Organisation</strong>
+                        <p>Groupe de 3</p>
+                    </div>
+                </div>
+
+                <div class="evidence-box">
+                    <h4>Preuves et Analyse critique</h4>
+                    <p style="margin-bottom: 1rem;">Extrait du document ministériel de base (Budget Éducation 2022) analysé :</p>
+                    <img src="../images/sae1.03-document-base.png" alt="Document de base" class="evidence-image">
+                    
+                    <p style="margin: 1.5rem 0 1rem 0;">Extrait de notre support de présentation orale portant sur la réflexion critique de l'article :</p>
+                    <img src="../images/sae1.03-critique-presentation.png" alt="Critique présentation" class="evidence-image">
+
+                    <p style="margin-top: 1rem; font-weight: 600;">
+                        Livrables produits :
+                    </p>
+                    <ul style="margin-left: 2rem; margin-top: 0.5rem;">
+                        <li>Rendu de 4 pages sur la critique approfondie de l'article</li>
+                        <li>Support de présentation orale synthétisant l'analyse</li>
+                        <li>Identification des enjeux métiers et des failles méthodologiques</li>
+                    </ul>
+                </div>
+
+                <div class="learning-box">
+                    <h4>Ce que j'ai appris et compétences développées</h4>
+                    <ul style="margin-left: 2rem; margin-top: 1rem;">
+                        <li><strong>Analyse critique des sources :</strong> Ce projet m'a appris à ne pas prendre les chiffres pour acquis et à vérifier systématiquement la fiabilité, la précision et l'exhaustivité des sources de données avant d'entamer une analyse.</li>
+                        <li><strong>Évaluation du storytelling statistique :</strong> J'ai appris à analyser si les graphiques et tableaux sont réellement au service du discours ou s'ils sont redondants, afin de garantir une transmission d'information claire et objective.</li>
+                        <li><strong>Identification des limites méthodologiques :</strong> J'ai pris conscience que des données propres et bien préparées sont indispensables pour éviter les biais d'interprétation et les erreurs de conclusion dans un rapport.</li>
+                        <li><strong>Synthèse et vulgarisation :</strong> Ce travail m'a permis de développer ma capacité à traduire des concepts budgétaires complexes en une synthèse accessible, tout en relevant les partis pris ou les manques de précision de l'auteur original.</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="sae-section">
+                <div class="sae-header">
+                    <h3>SAÉ 2.02 : Estimation par sondage simple et stratifié</h3>
+                    <div>
+                        <span class="sae-tag">Semestre 2</span>
+                        <span class="sae-tag">Statistique Inférentielle</span>
+                    </div>
+                </div>
+
+                <div class="ac-card">
+                    <h4>Apprentissages Critiques mobilisés</h4>
+                    <ul>                        <li><strong>AC12.01 :</strong> Réaliser que les sources de données ont des caractéristiques propres à considérer (variation, précision, mise à jour...)</li>
+                        <li><strong>AC12.02 :</strong> Comprendre qu'une analyse correcte ne peut émaner que de données propres et préparées</li>                        <li><strong>AC12.05 :</strong> Comprendre l’intérêt de l’utilisation d’un modèle probabiliste</li>
+                        <li><strong>AC12.06 :</strong> Appréhender la notion de fluctuation d’échantillonnage, notamment à l’aide de simulations probabilistes</li>
+                    </ul>
+                </div>
+
+                <h4 style="color: #1f3c88; margin-bottom: 1rem;">Description du projet</h4>
+                <p>
+                    Nous avons estimé la population de la Bretagne à partir d’un jeu de données communales en appliquant des outils d'estimation (intervalles de confiance) sur des échantillons simples et stratifiés.
+                </p>
+
+                <div class="info-grid">
+                    <div class="info-item">
+                        <strong>Objectif</strong>
+                        <p>Estimer des paramètres globaux (population, âge moyen) à partir d'échantillons et comparer l'efficacité des méthodes de sondage via des simulations sous R.</p>
+                    </div>
+                    <div class="info-item">
+                        <strong>Organisation</strong>
+                        <p>Travail individuel sur simulateur R</p>
+                    </div>
+                </div>
+
+                <div class="tools">
+                    <span class="tool-badge">R (via RStudio)</span>
+                </div>
+
+                <div class="evidence-box">
+                    <h4>Preuve 1 : Activité d'estimation (Âge clients)</h4>
+                    <p>
+                        Il nous était demandé de tirer un échantillon aléatoire d’âges clients, puis de calculer la moyenne, l’écart-type et de construire un intervalle de confiance à 95 % pour l’âge moyen. Nous devions ensuite répéter cette expérience 50 fois afin d’observer la variabilité des estimations, de calculer l’espérance (E[X]), la variance (V[X]), et de déterminer la proportion d’intervalles contenant la vraie valeur du paramètre.
+                    </p>
+                    <img src="../images/sae2.02-code.png" alt="Code R de simulation" class="evidence-image">
+                    <p style="margin-top: 1rem;">
+                        J’ai répété l’expérience 50 fois pour observer la fluctuation des estimations de l’âge moyen. Cela m’a permis de voir que même si on applique la même méthode, les résultats varient naturellement selon l’échantillon tiré.
+                    </p>
+
+                    <h4 style="margin: 1.5rem 0 1rem 0;">Preuve 2 : Résultat de la simulation</h4>
+                    <p>
+                        Grâce à cette simulation sous R, j’ai mieux compris le fonctionnement d’un intervalle de confiance, son lien avec l’échantillonnage, et les limites d’une estimation ponctuelle. J'ai appris à traduire une situation concrète en formules statistiques et à coder le raisonnement.
+                    </p>
+                    <img src="../images/sae2.02-code2.png" alt="Résultats simulation R" class="evidence-image">
+                    
+                    
+                </div>
+
+                <div class="learning-box">
+                    <h4>Ce que j'ai appris et compétences développées</h4>
+                    <ul style="margin-left: 2rem; margin-top: 1rem;">
+                        <li><strong>Maîtrise des outils de la statistique inférentielle :</strong> Cette compétence m'a permis de comprendre comment tirer des conclusions à partir de données partielles (échantillons) pour estimer des paramètres sur une population entière.</li>
+                        <li><strong>Modélisation et automatisation avec R :</strong> J'ai appris à traduire une question concrète en formules statistiques et à utiliser R pour automatiser les calculs (moyennes, écarts-types) afin d'interpréter les résultats dans un contexte réel.</li>
+                        <li><strong>Appréhension de la fluctuation d'échantillonnage :</strong> La réalisation de 50 tirages répétés m'a permis d'observer que les résultats varient naturellement selon l'échantillon, illustrant ainsi l'importance des intervalles de confiance dans une estimation.</li>
+                        <li><strong>Impact du choix de la méthode de sondage :</strong> J'ai pris conscience de l'influence de la méthode choisie (simple ou stratifié) sur la fiabilité et la précision des résultats selon la structure de la population étudiée.</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section class="impact-section">
+            <h2>Bilan global : Ce que ces SAÉ m'ont apporté</h2>
+            <div class="section-divider"></div>
+            
+            <h3 style="font-size: 1.2rem; margin-top: 1rem;">Compétences acquises</h3>
+            <p>
+                Ces deux SAÉ m'ont permis de couvrir les bases de l'analyse statistique, de la posture critique face à un rapport officiel (SAÉ 1.03) à la pratique de la statistique inférentielle (SAÉ 2.02). J'ai acquis une rigueur méthodologique permettant de valider la fiabilité d'une source avant d'interpréter des résultats.
+            </p>
+
+            <h3 style="font-size: 1.2rem; margin-top: 1.5rem;">Progression</h3>
+            <p>
+                J'ai appris à passer d'une lecture passive de chiffres à une véritable expertise technique avec R. La simulation de tirages répétitifs m'a fait comprendre concrètement des concepts abstraits comme la fluctuation d'échantillonnage et l'importance des intervalles de confiance. Je sais désormais adapter ma méthode de sondage (simple ou stratifié) en fonction de la structure réelle des données.
+            </p>
+        </section>
+
+    </div>
+
+    <footer>
+        <p>&copy; 2026 - Portfolio de Valentin Geslin - BUT Sciences des Données</p>
+        <p style="margin-top: 0.5rem; font-size: 0.9rem;">
+            Contact : <a href="mailto:valentingeslin231@gmail.com">valentingeslin231@gmail.com</a> | 
+            LinkedIn : <a href="https://www.linkedin.com/in/valentin-geslin" target="_blank">Valentin Geslin</a> | 
+            <a href="../science-des-donn-es-30879.pdf" target="_blank">Programme national</a>
+        </p>
+    </footer>
+
+</body>
+</html>

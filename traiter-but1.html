@@ -1,0 +1,660 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Traiter des données - BUT1 | Portfolio Valentin Geslin</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: #2f3640;
+            line-height: 1.6;
+            background-color: #ffffff;
+        }
+
+        /* Navigation */
+        nav {
+            background-color: #1f3c88;
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        nav > ul > li {
+            position: relative;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            transition: background-color 0.3s;
+            border-radius: 4px;
+            display: block;
+        }
+
+        nav a:hover {
+            background-color: #16a085;
+        }
+
+        /* Dropdown menu */
+        .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+
+        .dropdown > a {
+            cursor: pointer;
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: #1f3c88;
+            min-width: 220px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            border-radius: 4px;
+            margin-top: 0.3rem;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 0.5rem 0;
+        }
+
+        .dropdown::before {
+            content: '';
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            height: 0.8rem;
+            background: transparent;
+        }
+
+        .dropdown-content a {
+            padding: 0.75rem 1.5rem;
+            white-space: nowrap;
+        }
+
+        .dropdown-content a:hover {
+            background-color: #16a085;
+        }
+
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+
+        /* Header */
+        header {
+            background: linear-gradient(135deg, #1f3c88 0%, #16a085 100%);
+            color: white;
+            text-align: center;
+            padding: 3rem 1rem;
+        }
+
+        header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        /* Breadcrumb */
+        .breadcrumb {
+            background-color: #f1f2f6;
+            padding: 1rem;
+            text-align: center;
+            font-size: 0.95rem;
+        }
+
+        .breadcrumb a {
+            color: #16a085;
+            text-decoration: none;
+        }
+
+        .breadcrumb a:hover {
+            text-decoration: underline;
+        }
+
+        /* Container */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem 1rem;
+        }
+
+        /* Section */
+        section {
+            margin-bottom: 3rem;
+        }
+
+        section h2 {
+            color: #1f3c88;
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        section h3 {
+            color: #1f3c88;
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            margin-top: 2rem;
+        }
+
+        .section-divider {
+            width: 60px;
+            height: 3px;
+            background-color: #16a085;
+            margin-bottom: 1.5rem;
+        }
+
+        /* Definition Box */
+        .definition-box {
+            background: linear-gradient(135deg, #1f3c88 0%, #16a085 100%);
+            color: white;
+            padding: 2rem;
+            border-radius: 8px;
+            margin: 2rem 0;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .definition-box h3 {
+            color: white;
+            margin: 0 0 1rem 0;
+        }
+
+        /* Info note */
+        .info-note {
+            background-color: #e8f8f5;
+            padding: 1rem;
+            border-radius: 8px;
+            border-left: 4px solid #16a085;
+            margin: 1.5rem 0;
+            font-size: 0.95rem;
+        }
+
+        /* AC Card (inside SAE) */
+        .ac-card {
+            background-color: #f1f2f6;
+            padding: 1.5rem;
+            border-radius: 8px;
+            border-left: 4px solid #16a085;
+            margin: 1.5rem 0;
+        }
+
+        .ac-card h4 {
+            color: #1f3c88;
+            margin-bottom: 1rem;
+        }
+
+        .ac-card ul {
+            list-style-position: inside;
+            margin-left: 1rem;
+        }
+
+        .ac-card li {
+            margin: 0.5rem 0;
+            padding-left: 0.5rem;
+        }
+
+        /* SAE Section */
+        .sae-section {
+            background-color: white;
+            border: 2px solid #4a69bd;
+            border-radius: 8px;
+            padding: 2rem;
+            margin: 2rem 0;
+            position: relative;
+        }
+
+        .sae-section::before {
+            content: '';
+            position: absolute;
+            left: -6px;
+            top: 2rem;
+            width: 12px;
+            height: 12px;
+            background-color: #16a085;
+            border-radius: 50%;
+            box-shadow: 0 0 0 4px white, 0 0 0 6px #16a085;
+        }
+
+        .sae-header {
+            border-bottom: 2px solid #f1f2f6;
+            padding-bottom: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .sae-header h3 {
+            color: #1f3c88;
+            margin: 0 0 0.5rem 0;
+        }
+
+        .sae-tag {
+            display: inline-block;
+            background-color: #e8f8f5;
+            color: #16a085;
+            padding: 0.25rem 0.75rem;
+            border-radius: 4px;
+            font-size: 0.85rem;
+            font-weight: bold;
+            margin-right: 0.5rem;
+        }
+
+        /* Info Grid */
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+
+        .info-item {
+            background-color: #f1f2f6;
+            padding: 1rem;
+            border-radius: 6px;
+            border-left: 3px solid #16a085;
+        }
+
+        .info-item strong {
+            color: #1f3c88;
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+
+        /* Tools Badges */
+        .tools {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin: 1rem 0;
+        }
+
+        .tool-badge {
+            background-color: #1f3c88;
+            color: white;
+            padding: 0.4rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        /* Evidence Box */
+        .evidence-box {
+            background-color: #e8f8f5;
+            padding: 1.5rem;
+            border-radius: 8px;
+            border-left: 4px solid #16a085;
+            margin: 1.5rem 0;
+        }
+
+        .evidence-box h4 {
+            color: #1f3c88;
+            margin-bottom: 1rem;
+        }
+
+        .evidence-image {
+            max-width: 100%;
+            border-radius: 8px;
+            margin: 1rem 0;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+
+        /* Learning Box */
+        .learning-box {
+            background-color: #fef9f5;
+            padding: 1.5rem;
+            border-radius: 8px;
+            border-left: 4px solid #16a085;
+            margin: 1.5rem 0;
+        }
+
+        .learning-box h4 {
+            color: #1f3c88;
+            margin-bottom: 1rem;
+        }
+
+        /* Global Impact */
+        .impact-section {
+            background: linear-gradient(135deg, #f1f2f6 0%, #e8f8f5 100%);
+            padding: 2rem;
+            border-radius: 8px;
+            border-left: 4px solid #16a085;
+            margin-top: 3rem;
+        }
+
+        .impact-section h2 {
+            color: #1f3c88;
+            margin-bottom: 1rem;
+        }
+
+        /* Footer */
+        footer {
+            background-color: #2f3640;
+            color: white;
+            text-align: center;
+            padding: 2rem;
+            margin-top: 3rem;
+        }
+
+        footer a {
+            color: #16a085;
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 2rem;
+            }
+
+            nav ul {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+
+            .dropdown-content {
+                position: static;
+                box-shadow: none;
+                transform: none;
+                left: auto;
+            }
+
+            .info-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <ul>
+            <li><a href="../index.html">Accueil</a></li>
+            <li class="dropdown">
+                <a>BUT1 ▼</a>
+                <div class="dropdown-content">
+                    <a href="traiter-but1.html">Traiter</a>
+                    <a href="analyser-but1.html">Analyser</a>
+                    <a href="valoriser-but1.html">Valoriser</a>
+                </div>
+            </li>
+            <li class="dropdown">
+                <a>BUT2 ▼</a>
+                <div class="dropdown-content">
+                    <a href="../BUT2/traiter-but2.html">Traiter</a>
+                    <a href="../BUT2/analyser-but2.html">Analyser</a>
+                    <a href="../BUT2/valoriser-but2.html">Valoriser</a>
+                    <a href="../BUT2/modeliser-but2.html">Modéliser</a>
+                </div>
+            </li>
+            <li><a href="../stage.html">Stage</a></li>
+            <li><a href="../projection.html">Projection BUT3</a></li>
+        </ul>
+    </nav>
+
+    <header>
+        <h1>Traiter des données</h1>
+        <p>BUT 1</p>
+    </header>
+
+    <div class="breadcrumb">
+        <a href="../index.html">Accueil</a> / <a href="../index.html#organisation">BUT1</a> / Traiter des données
+    </div>
+
+    <div class="container">
+
+        <section>
+            <h2>Définition de la compétence</h2>
+            <div class="section-divider"></div>
+
+            <div class="definition-box">
+                <p>
+                    <strong>Traiter des données</strong> consiste à collecter, stocker, préparer et exploiter des données en vue de leur analyse. Cette compétence implique la maîtrise des techniques de manipulation de données, la gestion de bases de données, ainsi que l'utilisation d'outils et de langages adaptés au traitement de volumes variés de données.
+                </p>
+                <p style="margin-top: 1rem;">
+                    <strong>En BUT1</strong>, l'accent est mis sur les fondamentaux : collecte de données structurées, manipulation avec des requêtes SQL, préparation et nettoyage des données, utilisation d'outils adaptés (SGBD, tableurs, langages de programmation).
+                </p>
+            </div>
+        </section>
+
+        <section>
+            <h2>Situations d'Apprentissage et d'Évaluation</h2>
+            <div class="section-divider"></div>
+
+            <div class="info-note">
+                <p>
+                    Pour illustrer cette compétence, je présente ici deux SAÉ représentatives de mon parcours en BUT1. J'ai également travaillé cette compétence dans les <strong>SAÉ 1.02</strong> et <strong>SAÉ 2.01</strong>, qui ont contribué à développer ma maîtrise du traitement de données.
+                </p>
+            </div>
+
+            <div class="sae-section">
+                <div class="sae-header">
+                    <h3>SAÉ 1.01 : Création de reporting à partir de données dans un SGBD relationnel</h3>
+                    <div>
+                        <span class="sae-tag">Semestre 1</span>
+                        <span class="sae-tag">Groupe de 3</span>
+                    </div>
+                </div>
+
+                <div class="ac-card">
+                    <h4>Apprentissages Critiques mobilisés</h4>
+                    <ul>
+                        <li><strong>AC11.01 :</strong> Correctement interpréter et prendre en compte le besoin du commanditaire ou du client</li>
+                        <li><strong>AC11.02 :</strong> Respecter les formalismes de notation</li>
+                        <li><strong>AC11.03 :</strong> Connaître la syntaxe des langages et savoir l'utiliser</li>
+                        <li><strong>AC11.04 :</strong> Mesurer l'importance de maîtriser la structure des données à exploiter</li>
+                    </ul>
+                </div>
+
+                <h4 style="color: #1f3c88; margin-bottom: 1rem;">Description du projet</h4>
+                <p>
+                    Cette SAÉ consistait à répondre à des besoins métier en exploitant une base de données relationnelle sur le cinéma (films, acteurs, réalisateurs). L'objectif était de construire des requêtes SQL pour extraire des informations pertinentes, puis de produire des tableaux et graphiques sous Excel pour faciliter la lecture et l'analyse des données.
+                </p>
+                <p style="margin-top: 1rem;">
+                    <strong>Exemple concret :</strong> Pour la requête 7, je devais calculer le nombre d'acteurs et actrices ayant joué dans au moins un film, regroupés par tranches d'âge de 10 ans. J'ai utilisé trois tables (Basics, Principals, Name_Basics) avec des filtres sur les professions, dates de naissance et types de titres.
+                </p>
+
+                <div class="info-grid">
+                    <div class="info-item">
+                        <strong>Objectif</strong>
+                        <p>Répondre à des besoins métier par des requêtes SQL et produire des visualisations claires</p>
+                    </div>
+                    <div class="info-item">
+                        <strong>Durée</strong>
+                        <p>4 semaines - Septembre/Octobre 2024</p>
+                    </div>
+                    <div class="info-item">
+                        <strong>Organisation</strong>
+                        <p>Travail en groupe de 3 avec répartition des requêtes</p>
+                    </div>
+                </div>
+
+                <h4 style="color: #1f3c88; margin: 1.5rem 0 1rem 0;">Outils et technologies utilisés</h4>
+                <div class="tools">
+                    <span class="tool-badge">Microsoft Access</span>
+                    <span class="tool-badge">SQL</span>
+                    <span class="tool-badge">Excel</span>
+                    <span class="tool-badge">Graphiques Excel</span>
+                </div>
+                <p style="margin-top: 1rem; color: #666; font-size: 0.95rem;">
+                    <strong>Access</strong> a été utilisé pour concevoir et exécuter les requêtes SQL sur le SGBD relationnel. <strong>Excel</strong> a permis d'importer les données extraites et de créer des tableaux croisés dynamiques ainsi que des graphiques adaptés pour la restitution.
+                </p>
+
+                <div class="evidence-box">
+                    <h4>Preuves et résultats obtenus</h4>
+                    <p style="margin-bottom: 1rem;">
+                        <strong>Exemple : Requête 7 - Répartition des acteurs par tranche d'âge</strong>
+                    </p>
+                    
+                    <p style="margin-bottom: 1rem;">
+                        Cette requête SQL permet de calculer l'âge des acteurs ou actrices à partir de leur année de naissance (ou de décès), puis de les regrouper par tranches de 10 ans :
+                    </p>
+
+                    <img src="../images/sae1.01-requetesql.png" alt="Requête SQL de la SAÉ 1.01" class="evidence-image">
+
+                    <p style="margin: 1rem 0;">
+                        Les données extraites ont ensuite été importées dans Excel pour produire un graphique clair montrant la répartition des acteurs par tranche d'âge :
+                    </p>
+
+                    <img src="../images/sae1.01-graphique.png" alt="Graphique Excel de la SAÉ 1.01" class="evidence-image">
+
+                    <p style="margin-top: 1rem; font-weight: 600;">
+                        Livrables produits :
+                    </p>
+                    <ul style="margin-left: 2rem; margin-top: 0.5rem;">
+                        <li>10 requêtes SQL documentées répondant aux besoins métier</li>
+                        <li>Fichier Excel avec tableaux et graphiques pour chaque requête</li>
+                        <li>Compte-rendu expliquant la démarche et les choix techniques</li>
+                    </ul>
+                </div>
+
+                <div class="learning-box">
+                    <h4>Ce que j'ai appris et compétences développées</h4>
+                    <ul style="margin-left: 2rem; margin-top: 1rem;">
+                        <li><strong>Importance de bien comprendre la structure des données :</strong> Avant d'écrire une requête, il faut analyser le modèle relationnel pour identifier les bonnes tables et les bonnes jointures</li>
+                        <li><strong>Construction de requêtes SQL avancées :</strong> Calculs (âges), filtres multiples, jointures entre plusieurs tables, regroupements par tranches</li>
+                        <li><strong>Lien entre besoin métier et logique technique :</strong> Traduire une demande en langage naturel ("nombre d'acteurs par tranche d'âge") en une requête SQL précise et efficace</li>
+                        <li><strong>Visualisation des données :</strong> Créer des graphiques pertinents qui facilitent la lecture et l'interprétation des résultats</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="sae-section">
+                <div class="sae-header">
+                    <h3>SAÉ 2.06 : Analyse des conditions météorologiques sur les annulations des trajets maritimes BreizhGo</h3>
+                    <div>
+                        <span class="sae-tag">Semestre 2</span>
+                        <span class="sae-tag">Groupe de 5</span>
+                        <span class="sae-tag">Client : Région Bretagne</span>
+                    </div>
+                </div>
+
+                <div class="ac-card">
+                    <h4>Apprentissages Critiques mobilisés</h4>
+                    <ul>
+                        <li><strong>AC11.01 :</strong> Correctement interpréter et prendre en compte le besoin du commanditaire</li>
+                        <li><strong>AC11.02 :</strong> Respecter les formalismes de notation</li>
+                        <li><strong>AC11.03 :</strong> Connaître la syntaxe des langages et savoir l'utiliser (R, Python)</li>
+                        <li><strong>AC11.04 :</strong> Mesurer l'importance de maîtriser la structure des données à exploiter</li>
+                        <li><strong>AC11.05 :</strong> Comprendre les structures algorithmiques de base et leur contexte d'usage</li>
+                        <li><strong>AC11.06 :</strong> Prendre conscience de l'intérêt de la programmation pour gagner en efficacité</li>
+                    </ul>
+                </div>
+
+                <h4 style="color: #1f3c88; margin-bottom: 1rem;">Description du projet</h4>
+                <p>
+                    Ce projet de grande envergure répondait à une problématique réelle de la <strong>Région Bretagne</strong> concernant les annulations de traversées maritimes vers les îles du Morbihan. L'enjeu était de comprendre l'impact météo pour mieux informer les usagers.
+                </p>
+                <p style="margin-top: 1rem;">
+                    Le projet a nécessité une phase importante de compréhension du besoin client à travers plusieurs <strong>réunions de cadrage</strong>, permettant de définir précisément les problématiques de transport et de sécurité maritime.
+                </p>
+
+                <div class="info-grid">
+                    <div class="info-item">
+                        <strong>Objectif</strong>
+                        <p>Analyser les causes météo des annulations et proposer des outils d'aide à la décision</p>
+                    </div>
+                    <div class="info-item">
+                        <strong>Durée et investissement</strong>
+                        <p>6 mois (Janvier à Juin 2025) - Plus de 100 heures de travail</p>
+                    </div>
+                    <div class="info-item">
+                        <strong>Mon rôle principal</strong>
+                        <p>Nettoyage des bases de données, rédaction du rapport final et confection de l'application</p>
+                    </div>
+                </div>
+
+                <h4 style="color: #1f3c88; margin: 1.5rem 0 1rem 0;">Outils et technologies utilisés</h4>
+                <div class="tools">
+                    <span class="tool-badge">Excel</span>
+                    <span class="tool-badge">Langage R</span>
+                    <span class="tool-badge">Python</span>
+                    <span class="tool-badge">Word</span>
+                    <span class="tool-badge">Cahier des charges</span>
+                    <span class="tool-badge">Infographie</span>
+                </div>
+                <p style="margin-top: 1rem; color: #666; font-size: 0.95rem;">
+                    <strong>Excel</strong> a été notre outil central pour la récupération et la structuration des données. L'analyse statistique (univariée et bivariée) a été réalisée sous <strong>R</strong>. <strong>Python</strong> a été utilisé de manière ponctuelle pour gagner du temps sur certains traitements et pour concevoir un prototype d'application prédictive.
+                </p>
+
+                <div class="evidence-box">
+                    <h4>Résultats obtenus et livrables</h4>
+                    
+                    <p style="font-weight: 600; margin-bottom: 0.5rem;">Livrables produits :</p>
+                    <ul style="margin-left: 2rem; margin-top: 0.5rem;">
+                        <li><strong>Cahier des charges :</strong> Document formel traduisant les besoins de la Région Bretagne.</li>
+                        <li><strong>Rapport d'analyse complet :</strong> Sous Word, incluant les analyses croisées (houle/vent).</li>
+                        <li><strong>Infographie :</strong> Synthèse visuelle des résultats pour le commanditaire.</li>
+                        <li><strong>Prototype d'application Python :</strong> Outil visant à prédire les risques d'annulations futures en fonction de scénarios météo.</li>
+                    </ul>
+
+                    <p style="margin-top: 1.5rem; font-weight: 600;">Mon apport personnel :</p>
+                    <p>
+                        J'ai particulièrement contribué au <strong>nettoyage des données</strong> (harmonisation des sources météo et transport), à la <strong>rédaction du rapport final</strong> ainsi qu'à la <strong>confection de l'application Python</strong>, en me concentrant sur la logique de traitement.
+                    </p>
+                </div>
+
+                <div class="learning-box">
+                    <h4>Ce que j'ai appris et compétences développées</h4>
+                    <ul style="margin-left: 2rem; margin-top: 1rem;">
+                        <li><strong>Gestion de la relation client :</strong> Comprendre les problématiques métier via des réunions régulières.</li>
+                        <li><strong>Traitement de données hétérogènes :</strong> Passer d'Excel à R pour effectuer des analyses statistiques rigoureuses.</li>
+                        <li><strong>Efficacité par la programmation :</strong> Utiliser Python comme outil de support pour accélérer les tâches répétitives.</li>
+                        <li><strong>Rigueur documentaire :</strong> Élaborer un cahier des charges et un rapport d'analyse professionnel.</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section class="impact-section">
+            <h2>Bilan global : Ce que ces SAÉ m'ont apporté</h2>
+            <div class="section-divider"></div>
+            
+            <h3 style="font-size: 1.2rem; margin-top: 1rem;">Compétences acquises</h3>
+            <p>
+                Ces deux SAÉ m'ont permis de couvrir tout le spectre du traitement de données. De la rigueur du SQL pour extraire des données structurées (SAÉ 1.01) à la complexité d'un projet client réel (SAÉ 2.06) impliquant du nettoyage manuel sous Excel et des analyses statistiques sous R.
+            </p>
+
+            <h3 style="font-size: 1.2rem; margin-top: 1.5rem;">Progression</h3>
+            <p>
+                J'ai appris à m'adapter aux outils en fonction des besoins : Excel pour la préparation agile, R pour la puissance statistique, et Python pour l'automatisation. La confrontation à un vrai client (Région Bretagne) m'a fait comprendre que le traitement de données n'est pas qu'une question de code, mais aussi de compréhension des enjeux humains et logistiques.
+            </p>
+        </section>
+
+    </div>
+
+    <footer>
+        <p>&copy; 2026 - Portfolio de Valentin Geslin - BUT Sciences des Données</p>
+        <p style="margin-top: 0.5rem; font-size: 0.9rem;">
+            Contact : <a href="mailto:valentingeslin231@gmail.com">valentingeslin231@gmail.com</a> | 
+            LinkedIn : <a href="https://www.linkedin.com/in/valentin-geslin" target="_blank">Valentin Geslin</a> | 
+            <a href="../science-des-donn-es-30879.pdf" target="_blank">Programme national</a>
+        </p>
+    </footer>
+
+</body>
+</html>
